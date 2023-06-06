@@ -13,7 +13,8 @@ Licznik::Licznik(QWidget *parent)
 QFont font("Arial Rounded MT Bold", 13);
 vbox = new QVBoxLayout();
 icon = new QPushButton(this);
-connect(icon, &QPushButton::clicked, this, &Licznik::stopClicked);
+connect(icon, &QPushButton::clicked, this, &Licznik::stopButtonClicked);
+//connect(icon, &QPushButton::clicked, this, &Licznik::stopClicked);
 icon->setIcon(QIcon(":/Tex/Tex/pause.png"));
 icon->setIconSize(QSize(60,60));
 icon->setStyleSheet("background-color: transparent" );
@@ -97,22 +98,27 @@ void Licznik::stop()
 {
     if (!is_pause)
   {
+        qDebug() << "Metoda stop- not_isapuse";
     licznik->stop();
     is_pause=true;
     }
     else
     {
+          qDebug() << "Metoda start- is pause";
        licznik->start();
        is_pause=false;
-
     }
 }
 
 void Licznik::start()
 {
+
+    qDebug() << "Metoda start- licznik";
     licznik->start(1000);
     icon->setIcon(QIcon(":/Tex/Tex/pause.png"));
     is_pause=false;
+
+
 }
 
 void Licznik::reset()
@@ -128,10 +134,15 @@ return czas_rozpoczecia.addSecs(czas_gry_int);
 
 void  Licznik::stopButtonClicked()
 {
+    qDebug() << "Wciśnieto stop";
     emit stopClicked();
 }
 
 void Licznik::disable()
 {
     this->hide();
+}
+void Licznik::setTime(QTime time)
+{
+    czas_rozpoczecia = time;
 }

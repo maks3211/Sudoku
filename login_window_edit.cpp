@@ -4,6 +4,9 @@
 Login_Window_Edit::Login_Window_Edit(QWidget *parent)
     : QWidget{parent}
 {
+    warnings = new Warnings(parent);
+
+
     text = new QLabel (parent);
     text->setText("<center><font color='#0e0b78', size = 9><b>Sudoku</b></font><br><font color= '#092D8C', size = 4>Edytuj konto</font><center>");
 
@@ -51,6 +54,12 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
     edit ->setText("Zmień");
     edit->setFixedSize(165,35);
 
+
+    remove= new QPushButton(parent);
+    remove ->setText("Usuń konto");
+    remove->setFixedSize(165,35);
+
+
     choice_box = new QCheckBox(parent);
     choice_box->setText("Haslo/login");
     choice_box ->setFixedSize(165,35);
@@ -61,12 +70,7 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
 
 
 
-    warrning = new QLabel(parent);
-    warrning ->setFixedSize(180,38); //180,40
-    warrning->setText("");
-    warrning->setWordWrap(true);
-    warrning->setAlignment(Qt::AlignCenter);
-    warrning->setStyleSheet("QLabel{font-size:14px;}"  );
+
 
 
     QVBoxLayout *layout1 = new QVBoxLayout(parent);
@@ -75,7 +79,7 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
     layout1->addWidget(text);
     layout1->addWidget(login);
     layout1->addWidget(password);
-    layout1->addWidget(warrning);
+    layout1->addWidget(warnings->get_short_message());
     layout1->addWidget(new_thing);
     layout1->addWidget(new_thing_p);
     layout1->addWidget(edit);
@@ -89,12 +93,28 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
 
     connect(choice_box,&QCheckBox::stateChanged,this,&Login_Window_Edit::What_edit);
 
+    connect(remove,&QPushButton::clicked,this,&Login_Window_Edit::Delete_user);
+
+    connect(edit, &QPushButton::clicked,[this](){
+        if (!choice_box->isChecked())
+         {
+            //u.editLogin(login->text().toStdString(), password->text().toStdString(),new_thing->text().toStdString(),new_thing_p->text().toStdString());
+        Edit_login();
+        }
+        else
+        {
+            Edit_password();
+        }
+    });
 }
 
 
 void Login_Window_Edit::go_back_clicked()
 {
     emit go_back();
+    Clear(0);
+    Clear(1);
+    Clear(2);
 }
 
 
@@ -105,9 +125,10 @@ void Login_Window_Edit::What_edit()
         qDebug() << "Zmiana hasła";
         new_thing->setPlaceholderText("Nowe hasło");
         new_thing_p->setPlaceholderText("Powtórz hasło");
-
         new_thing->setEchoMode(QLineEdit::Password);
         new_thing_p->setEchoMode(QLineEdit::Password);
+
+        //metoda na zmiane
     }
     else
     {
@@ -116,8 +137,165 @@ void Login_Window_Edit::What_edit()
         qDebug()<< "Zmiana loginu";
         new_thing->setEchoMode(QLineEdit::Normal);
         new_thing_p->setEchoMode(QLineEdit::Normal);
+        //metody na zmiane
+
     }
 }
 
 
 
+void Login_Window_Edit::Delete_user()
+{
+
+    if(u.findUser(login->text().toStdString()))
+    {
+        if(u.checkPassword(password->text().toStdString()))
+        {
+           u.removeUser(login->text().toStdString(),password->text().toStdString());
+         warnings->User_deleted();
+         warnings->Show("short");
+           qDebug() <<"WYWALONY";
+           Clear(0);
+           Clear(1);
+        }
+        else
+        {
+         warnings->Bad_user_password();
+         warnings->Show("short");
+        }
+    }
+    else
+    {
+         warnings->No_user();
+         warnings->Show("short");
+    }
+}
+
+
+void Login_Window_Edit::Edit_login()
+{
+int a =-1;
+a = u.editLogin(login->text().toStdString(),password->text().toStdString(),new_thing->text().toStdString(),new_thing_p->text().toStdString());
+
+if (a == 0)
+{
+    qDebug ()<< "Udalo sie :)";
+    warnings->Change_made("login");
+    warnings->Show("short");
+    Clear(0);
+    Clear(1);
+    Clear(2);
+}
+else if (a == 1)
+{
+    qDebug ()<< "złe hasło-regex";
+    warnings->Pass_req();
+    warnings->Show("long");
+}
+else if (a == 2)
+{
+    qDebug ()<< "zajęty login";
+    warnings->Repeated_login();
+    warnings->Show("short");   
+}
+else if (a == 3)
+{
+    warnings->Login_req();
+    warnings->Show("long");
+    warnings->Bad_login();
+     warnings->Show("short");
+    qDebug ()<< "zły login- nie spełnia regex-a";
+}
+else if (a == 4)
+{
+    qDebug ()<< "złe hasło";
+    warnings->Bad_user_password();
+    warnings->Show("short");
+
+}
+else if (a == 5)
+{
+    warnings->No_user();
+    warnings->Show("short");
+    qDebug ()<< "nie ma takiego użtkownika- z remove user";
+
+}
+else if (a == 6)
+{
+    qDebug ()<< "loginy się różnią";
+    warnings->Diff_logins();
+    warnings->Show("short");
+}
+
+}
+
+
+void Login_Window_Edit::Edit_password()
+{
+int a =-1;
+a = u.editPassword(login->text().toStdString(),password->text().toStdString(),new_thing->text().toStdString(),new_thing_p->text().toStdString());
+
+if (a == 0)
+{
+    qDebug ()<< "Udalo sie :)";
+    warnings->Change_made("password");
+    warnings->Show("short");
+    Clear(0);
+    Clear(1);
+    Clear(2);
+}
+else if (a == 1)
+{
+    qDebug ()<< "złe hasło-regex";
+    warnings->Pass_req();
+    warnings->Show("long");
+}
+else if (a == 2)
+{
+    qDebug ()<< "zajęty login";
+}
+else if (a == 3)
+{
+    qDebug ()<< "zły login- nie spełnia regex-a";
+}
+else if (a == 4)
+{
+    qDebug ()<< "złe hasło";
+    warnings->Bad_password();
+    warnings->Show("short");
+}
+else if (a == 5)
+{
+    warnings->No_user();
+    warnings->Show("short");
+    qDebug ()<< "nie ma takiego użtkownika- z remove user";
+}
+else if (a == 6)
+{
+    qDebug ()<< "hasła się różnią";
+    warnings->Diff_passwords();
+    warnings->Show("short");
+}
+
+}
+
+
+void Login_Window_Edit::Clear(int a)
+{
+
+   if (a==0)
+    {
+        login->setText("");
+
+    }
+  else if (a==1)
+    {
+
+         password->setText("");
+    }
+    else if (a==2)
+    {
+        new_thing->setText("");
+         new_thing_p->setText("");
+    }
+}

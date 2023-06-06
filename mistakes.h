@@ -14,7 +14,7 @@ public:
     void Add_mistake();
     int return_mis();
 private:
-    QMessageBox * box;
+    QMessageBox * box; //chyba nie uzywane
    QLabel *mistakes;
    QLabel *hint_label;
    QPushButton *hint_button;

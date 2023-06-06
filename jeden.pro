@@ -22,10 +22,14 @@ SOURCES += \
     my_button.cpp \
     notatki.cpp \
     savegame.cpp \
+    statistics.cpp \
+    statistics_window.cpp \
     sudoku.cpp \
-    user.cpp
+    user.cpp \
+    warnings.cpp
 
 HEADERS += \
+    Result_struct.h \
     dif_level.h \
     gra.h \
     hint.h \
@@ -38,8 +42,11 @@ HEADERS += \
     my_button.h \
     notatki.h \
     savegame.h \
+    statistics.h \
+    statistics_window.h \
     sudoku.h \
-    user.h
+    user.h \
+    warnings.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -51,4 +58,5 @@ FORMS +=
 RESOURCES += \
     Tex.qrc
 
+RC_ICONS = Tex/game_icon.ico
 DISTFILES +=

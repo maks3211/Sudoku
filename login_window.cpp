@@ -171,7 +171,10 @@ void Login_Window::Login_success(bool guest)
     log = "gu";
     emit logged(1);
     this->close();
+    guest=false;
     //qApp->exit();
+    login->setText("");
+    password->setText("");
     }
 else
     {   
@@ -181,9 +184,12 @@ else
             qDebug ()<< password->text();
         if(user.checkPassword(password->text().toStdString()))
         {
-             qDebug ()<< "Zalogowanio sie";
+             log= login->text().toStdString();
+             qDebug ()<< "Zalogowanio sie jako: " << QString::fromStdString(log);
              emit logged(2);
              this->close();
+              login->setText("");
+              password->setText("");
            //qApp->exit();
         }
         else
@@ -261,9 +267,11 @@ std::string Login_Window::get_user()
 {
 if (log == "gu")
 {
+    qDebug() << "ZWARACAM GOSCIA";
  return log;
 }
- log= login->text().toStdString();
+qDebug() << "ZWARACAM UZYTKOWNIKA";
+ //log= login->text().toStdString();
  return log;
 
 }

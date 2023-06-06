@@ -24,11 +24,11 @@ private:
 
 public:
     SaveGame();
-    void make_save(std::vector<std::vector<int>>&full_board,std::vector<std::vector<int>>&removed_board ,QPushButton *m_button[9][9],int hint,int mis,std::string user);
-    void load_save(std::vector<std::vector<int>>&full_board,std::vector<std::vector<int>>&removed_board,QPushButton *m_button[9][9],int &hint,int &mis,std::string user);
+    void make_save(std::vector<std::vector<int>>&full_board,std::vector<std::vector<int>>&removed_board ,QPushButton *m_button[9][9],int hint,int mis,std::string user,std::string time, int lvl);
+    std::string load_save(std::vector<std::vector<int>>&full_board,std::vector<std::vector<int>>&removed_board,QPushButton *m_button[9][9],int &hint,int &mis,std::string user, int &lvl);
     std::vector<std::tuple<int,int,int>> get_buttons();
     bool is_file(std::string user);
-
+    void Change_username(std::string new_name,std::string old_name);
 };
 
 #endif // SAVEGAME_H

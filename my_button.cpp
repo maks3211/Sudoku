@@ -14,6 +14,6 @@ this->setText(str);
 //this->setEnabled(true);
 
 
-    this->setFixedSize(125,42);
+  //  this->setFixedSize(125,42);
 
 }

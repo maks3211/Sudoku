@@ -26,14 +26,14 @@ public slots:
     void reset();
     void disable();
     QTime getTime();
-
+    void setTime(QTime time);
 signals:
     void stopClicked();
 private:
    QTimer *licznik;
    QTime czas_rozpoczecia;
    int czas_gry_int;
-
+bool win;
    QLabel *label_czas_gry;
    QVBoxLayout *vbox;
    QPushButton *icon;

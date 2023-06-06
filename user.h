@@ -11,6 +11,8 @@
 #include<vector>
 #include<fstream>
 #include <regex>
+#include"savegame.h"
+#include"statistics.h"
 
 class User
 {
@@ -23,11 +25,11 @@ public:
     User();
 bool findUser(std::string login);
 bool checkPassword(std::string password);
-int addUser(std::string login,std::string password,std::string password_p);
-void save_to_file(std::string login,std::string password);
-void removeUser(std::string login,std::string password);
-void editLogin(std::string login,std::string password,std::string new_login,std::string new_login_p);
-void editPassword(std::string login,std::string password,std::string new_password,std::string new_password_p);
+int addUser(std::string login,std::string password,std::string password_p,bool new_line=true);
+void save_to_file(std::string login,std::string password,bool new_line=true);
+int removeUser(std::string login,std::string password);
+int editLogin(std::string login,std::string password,std::string new_login,std::string new_login_p);
+int editPassword(std::string login,std::string password,std::string new_password,std::string new_password_p);
 };
 
 #endif // USER_H

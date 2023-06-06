@@ -120,9 +120,6 @@ void Gra::Start_game(int level) //Pokazuje gra- animacja jest do cyferek
     Create_Sudoku(level);
     Fill_Board();
     this->show();
-    qDebug() << "\n==========================TOOOOOOOOOOOOOO" ;
-
-    qDebug() << "\n==========================TOOOOOOOOOOOOOO" ;
 }
 
 void Gra::Highlight(int row,int col,std::vector<std::vector<int>>removed_board) //removed_board[row][col].wartosc != 0
@@ -197,7 +194,9 @@ void Gra::Offlight(int row,int col,std::vector<std::vector<int>>removed_board)
 void Gra::Pause()
 {
 if (is_pasue)
-     {  QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect();
+     {
+    qDebug()<< "Jest pauza";
+    QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect();
        blurEffect->setBlurRadius(36);   
        this->setGraphicsEffect(blurEffect);
 this ->setEnabled(false);
@@ -216,6 +215,7 @@ this ->setEnabled(false);
 }
 else
 {
+    qDebug()<<"Koniec pauszy";
     this ->setEnabled(true);
         this->setGraphicsEffect(nullptr);
    /* for(int i = 0; i < 9; i++) {
@@ -502,20 +502,25 @@ void Gra::show()
 
 
 
-void Gra::Save()
+void Gra::Save(QTime time,int &lvl)
 {
 
-    if (want_save)
+    if (want_save and filled !=0)
        {
         qDebug()<<"ZAPIS";
-        savegame.make_save(full_board,removed_board ,m_button,hints->return_hint(),mistakes->return_mis(),user);
+        savegame.make_save(full_board,removed_board,m_button,hints->return_hint(),mistakes->return_mis(),user,time.toString("hh:mm:ss").toStdString(),lvl);
+        qDebug() << "------------CZAS GRY: " << time << "-----";
        }
 }
 
-void Gra::Load()
+void Gra::Load(QTime &time, int &lvl)
 {
+
     qDebug() << "dostpeny";
-    savegame.load_save(full_board,removed_board,m_button,h,m,user); // jezeli jest save to po wznow to zrob
+   time=QTime::fromString(QString::fromStdString(savegame.load_save(full_board,removed_board,m_button,h,m,user,lvl)), "hh:mm:ss");
+   //savegame.load_save(full_board,removed_board,m_button,h,m,user); // jezeli jest save to po wznow to zrob
+    qDebug() << "Ile podpowiezi: "<<h;
+    hints->set_hint(h);
     Fill_Board();
     Set_Buttons();
 qDebug() << "odczytane bledy" << m;
@@ -524,6 +529,8 @@ for (int i =0; i < m ; i++)
 
     mistakes->Add_mistake();
 }
+
+qDebug() << "ODCZYTANY CZAS Z GRA: " << time;
 
 }
 
@@ -554,4 +561,37 @@ void Gra::Set_Buttons()
       m_button[ std::get<0>(savegame.get_buttons()[i])][ std::get<1>(savegame.get_buttons()[i])]->setText(QString::number(std::get<2>(savegame.get_buttons()[i])));
       Check(std::get<0>(savegame.get_buttons()[i]),std::get<1>(savegame.get_buttons()[i]),full_board,true);
     }
+}
+
+
+int Gra::Get_mistakes()
+{
+    qDebug() << "Popełniono " << mistakes->return_mis() << " błedow";
+   return mistakes->return_mis();
+}
+
+
+int Gra::Get_hints_used()
+{
+    qDebug() << "skorzystanmo z " << hints->return_hint() << "Podpowiedzi ";
+   return hints->return_hint();
+}
+
+void Gra::setEnabled(bool enabled)
+{
+    if (enabled == false) // wyłączanie dziła zawsze
+    {
+       this->QWidget::setEnabled(enabled);
+    }
+    if (enabled == true and filled !=0) // włączanie jeżeli nie wygrano
+    {
+        this->QWidget::setEnabled(enabled);
+    }
+   if (enabled == true and is_pasue==false)
+    {
+       this->QWidget::setEnabled(enabled);
+       qDebug() << "to jest";
+       is_pasue = true;
+    }
+
 }

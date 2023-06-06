@@ -61,3 +61,16 @@ int Hint::return_hint()
     return count;
 
 }
+
+void Hint::set_hint(int num)
+{
+    count = num ;
+    qDebug() << "USTAWIANIE Z GORY";
+ button ->setText("Podpowiedź: "+ QString::number(num)+ "/3");
+ if (count ==3) // ZMIENIC NA 3
+ {
+     button->setDisabled(true);
+     button->setStyleSheet("color:red");
+ }
+//count = num;
+}

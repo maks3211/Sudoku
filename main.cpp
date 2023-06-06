@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
        QObject::connect(&l, &Login_Window::logged, [&mainWindow, &l]() {
            mainWindow = new Main_Window(l.get_user());
            mainWindow->show();
-
+         QObject::connect(mainWindow, &Main_Window::loggedOut, &l, &Login_Window::show);
        });
 
 

@@ -6,5 +6,6 @@
         <file>Tex/pause.png</file>
         <file>Tex/pause_big.png</file>
         <file>Tex/play.png</file>
+        <file>Tex/game_icon.ico</file>
     </qresource>
 </RCC>

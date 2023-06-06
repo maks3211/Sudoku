@@ -13,7 +13,7 @@
 #include<QCheckBox>
 #include<QPoint>
 #include"user.h"
-
+#include"warnings.h"
 
 class Login_Window_Edit : public QWidget
 {
@@ -26,18 +26,23 @@ private:
     QLineEdit *password;
     QLineEdit *new_thing;   // nowe hasło lub login
     QLineEdit *new_thing_p;
-    QLabel *warrning;  //Jeżeli użytkownik nie istnieje lub złe stare hasło
-   // QLabel *message; //warunki loginu hasla
     QPushButton *edit;
     QPushButton *back;
+    QPushButton *remove;
     QCheckBox *choice_box;
     User u;
+    Warnings *warnings;
 
+
+void Edit_login();
+void Edit_password();
 
 public slots:
     void go_back_clicked();
 private slots:
     void What_edit();
+    void Delete_user();
+    void Clear(int a); //czyszczenie pól tekstowych 0-login 1-haslo 2-nowe
 signals:
 void go_back();
 };

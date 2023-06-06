@@ -14,6 +14,7 @@ public:
 void add_cord(int row, int col);
 void delete_cord(int row, int col);
 void reset();
+void set_hint(int num);
 int return_hint();
     std::pair<int,int> show_hint();
 private:

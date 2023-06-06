@@ -3,6 +3,7 @@
 #include "gra.h"
 #include"licznik.h"
 #include"dif_level.h"
+#include"statistics_window.h"
 //#include"mistakes.h"
 #include"my_button.h"
 #include <QWidget>
@@ -23,12 +24,15 @@ public:
   public slots :
     void Start_gry();
     void Wstecz();
-    void Nowe_okno();
+    void Show_instruction();
+    void Go_menu();
     void Koniec();
     void Wznow();
     void Start_from_file();
+    void Game_win();
 void Statystyki();
 signals:
+void loggedOut();
     void buttonClicked();
     void closeApp();
 private:
@@ -46,19 +50,26 @@ private:
     QPropertyAnimation *nowa;
   //  QPushButton *nowa_gra_button;
     my_button *nowa_gra_button;
-    QPushButton *wznow_button;
-    QPushButton *stat_button;
-    QPushButton *wyjdz_button;
-    QPushButton *wstecz;
+    my_button *wznow_button;
+    my_button *stat_button;
+    my_button *instrukcja_button;
+    my_button *wstecz_instrukcja;
+    my_button *wyjdz_button;
+    my_button *wstecz;
+    my_button *wyloguj;
+    QLabel *uzytkownik;
     Licznik *licznik;
     Gra *gra;
+
+    Statistics_Window *statystyki_okno;
+
     //
      Dif_level *poziomik;
     int level;
     void make_Bigger(bool bigger);
 private slots:
     void lvlchoose(int buttonId);
-
+ void onLogoutButtonClicked();
 
 };
 #endif // Main_Window_H

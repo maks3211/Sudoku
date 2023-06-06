@@ -11,12 +11,14 @@
 #include<QGridLayout>
 #include<QCheckBox>
 #include<QPainter>
+#include<QTime>
 //#include"test2.h"
 #include"sudoku.h"
 #include"notatki.h"
 #include"mistakes.h"
 #include"hint.h"
 #include"savegame.h"
+#include"Result_struct.h"
 
 class Gra : public QWidget
 {
@@ -40,17 +42,21 @@ void Pause();
 void Start_game(int level);
 void Reset(); // wyczyszczenie kontenerow
 void show();
-void Load();
+void Load(QTime &time, int &lvl);
 void show_resume();
+void setEnabled(bool enabled);
+
 std::string user;
 bool want_save;
 Gra(QWidget *parent = nullptr, std::string user = "-1");
     //~Gra();
 std::vector<std::vector<int>>removed_board;
 std::vector<std::vector<int>>full_board;
-
+int Get_mistakes();
+int Get_hints_used();
     public slots :
-void Save();
+void Save(QTime time, int &lvl);
+
 
 private:
 bool is_pasue;

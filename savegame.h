@@ -29,6 +29,8 @@ public:
     std::vector<std::tuple<int,int,int>> get_buttons();
     bool is_file(std::string user);
     void Change_username(std::string new_name,std::string old_name);
+    void remove_file(std::string user);
+
 };
 
 #endif // SAVEGAME_H

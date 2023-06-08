@@ -35,7 +35,6 @@ private:
    int czas_gry_int;
 bool win;
    QLabel *label_czas_gry;
-   QVBoxLayout *vbox;
    QPushButton *icon;
    QPropertyAnimation *small;
    QPropertyAnimation *big;

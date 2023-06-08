@@ -4,22 +4,26 @@
         : QWidget{parent}
     {
         count =0;
-        button = new QPushButton(this);
-        button ->setText("Podpowiedź: 0/3");
-        this->move(700,250);
-
+        button = new my_button("",this);
+        button ->setText("Podpowiedzi: 0/3");
+        //button->setFixedSize(130,45);
+        button->setStyleSheet("QPushButton {"
+                                    "border-radius: 10px;"
+                                    "background-color:rgb(52,94,229); "
+                                    "color:white;font-size:14px; }"
+                                    "QPushButton:hover:!pressed{background-color:rgb(28,72,225)}");
+        button->setGeometry(670,220,110,45);
     connect(button, &QPushButton::clicked, this, &Hint::changetext);
     }
 
     void Hint::changetext()
     {
         count +=1;        
-        button->setText("Podpowiedź " + QString::number(count)+ "/3");
+        button->setText("Podpowiedzi: " + QString::number(count)+ "/3");
         emit add_hint();
-        if (count ==80) // ZMIENIC NA 3
+        if (count ==3)
         {           
-            button->setDisabled(true);
-            button->setStyleSheet("color:red");
+          button->setDisabled(true);
         }
 
     }
@@ -51,7 +55,7 @@ void Hint::delete_cord(int row, int col)
 void Hint::reset()
 {
 count = 0;
-button ->setText("Podpowiedź: 0/3");
+button ->setText("Podpowiedzi: 0/3");
 button->setStyleSheet("color:black");
 button->setDisabled(false);
 }
@@ -59,18 +63,14 @@ button->setDisabled(false);
 int Hint::return_hint()
 {
     return count;
-
 }
 
 void Hint::set_hint(int num)
 {
-    count = num ;
-    qDebug() << "USTAWIANIE Z GORY";
- button ->setText("Podpowiedź: "+ QString::number(num)+ "/3");
- if (count ==3) // ZMIENIC NA 3
+ count = num ;
+ button ->setText("Podpowiedzi: "+ QString::number(num)+ "/3");
+ if (count ==3)
  {
      button->setDisabled(true);
-     button->setStyleSheet("color:red");
  }
-//count = num;
 }

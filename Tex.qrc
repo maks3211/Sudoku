@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/Tex">
+        <file>Tex/pause.png</file>
+        <file>Tex/play.png</file>
+        <file>Tex/game_icon.ico</file>
+        <file>Tex/ramka.png</file>
+        <file>Tex/kula.png</file>
+        <file>Tex/Sudoku.png</file>
+    </qresource>
+</RCC>

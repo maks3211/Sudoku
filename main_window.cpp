@@ -20,7 +20,7 @@
  *              ZMIENNA STAN
  * = 0-> NOWA, GRA, BEZ SAVA
  * = 1-> GDY ROZPOCZNE GRE TO NA 1
- *
+ * = 2 -> Nowa gra po wcisnieciu wstecz
  *
 */
 
@@ -35,7 +35,7 @@ Main_Window::Main_Window(std::string user,QWidget *parent)
     resize(1000,900);  //prawo gora
     this->setMinimumSize(500,450);
     this->setMaximumSize(1000,900);
-continuie=false;
+    continuie=false;
 
 
     widget1 = new QWidget();
@@ -62,34 +62,48 @@ else
     instrukcja_button = new my_button("Opis Gry", widget1);
     wyjdz_button = new my_button("Wyjdź", widget1);
     wyloguj = new my_button("Wyloguj się", widget1);
-    wyloguj->setGeometry((800-(wyjdz_button->width()))/2 , 825,125,42);
+    wstecz = new my_button("Wstecz", widget1);
+
+    zapisz_button = new my_button("Zapisz", widget1);
+    zapisz_button->hide();
+
+    zapis_label = new QLabel("Zapisano",widget1);
+    zapis_label->hide();
+
+    int width = 125;
+zapis_label->move((800-(width))/2 + 365,280);
+   stat_button->setGeometry((800-(width))/2 , 250,125,42);
+   zapisz_button->setGeometry((800-(width))/2 + 325, 300,125,42);
+   nowa_gra_button->setGeometry((800-(width))/2 , 150,125,42);
+
+    wznow_button->setGeometry((800-(width))/2 , 50,125,42);
 
 
+    instrukcja_button->setGeometry((800-(width))/2 , 350,125,42);
 
- //connect(wyjdz_button, &QPushButton::clicked, this, &Main_Window::Koniec);
+    wyjdz_button->setGeometry((800-(width))/2 , 750,125,42);
+
+    wyloguj->setGeometry((800-(width))/2 , 825,125,42);
+
+    wstecz->setGeometry((800-(width))/2 , 650,125,42);
+    wstecz->hide();
+
+
  connect(wyloguj, &QPushButton::clicked, this,&Main_Window::onLogoutButtonClicked);
- nowa_gra_button->setFixedSize(125,42);
-  //nowa_gra_button->setMaximumWidth(80);
-  // nowa_gra_button->setMinimumWidth(80);
 
-licznik = new Licznik(widget1);
-licznik->hide();
 
-  wznow_button->setGeometry((800-(wznow_button->width()))/2 , 50,125,42);
+
+    licznik = new Licznik(widget1);
+    licznik->hide();
+
+
     connect(wznow_button, SIGNAL(clicked()) , this , SLOT(Wznow()));
-if (!continuie)
-{
-wznow_button->hide();
-}
-else
-{
-wznow_button->hide();
-}
+        wznow_button->hide();
 
-    // Strona 1-> INDX 0
-   // QWidget *widget1 = new QWidget();
+
+
     plansza = new QLabel (widget1); //251
-    QPixmap zdjecie(":Tex/Sudoku.png");
+    QPixmap zdjecie(":/Tex/Tex/Sudoku.png");
     QPixmap zdjeciemale =zdjecie.scaled(QSize(252, 252), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     //Grafika sudoku
@@ -98,40 +112,14 @@ wznow_button->hide();
     plansza->setGeometry(50, 50, zdjeciemale.width(), zdjeciemale.height());
 
 
-        wstecz = new my_button("Wstecz", widget1);
-        wstecz->setFixedSize(125,42);
-wstecz->hide();
-        //QPushButton *nowa_guzik = new QPushButton("Nowa gra", widget1);
-       // QPushButton *statystyki = new QPushButton("Statystyki", widget1);
-
-        stat_button->setGeometry((800-(stat_button->width()))/2 , 250,125,42); //ZMIANA ROZMIARU PRZYCISKU - GDZIE, ROZMIAR
-       // QPushButton *wznow = new QPushButton("Wznów", widget1);
 
 
-       // QPushButton *wyjdz = new QPushButton("Wyjdź", widget1);
-        wyjdz_button->setGeometry((800-(wyjdz_button->width()))/2 , 750,125,42);
-        connect(wyjdz_button, &QPushButton::clicked, this, &Main_Window::Koniec);
+    connect(wyjdz_button, &QPushButton::clicked, this, &Main_Window::Koniec);
 
 
 
 
-//nowa_gra_button->raise();
 
-
-
-
-int buttonWidth = wstecz->width();
-
-//Licznik l;
-
-wstecz->move((800-buttonWidth)/2 , 650);
-nowa_gra_button->move((800-buttonWidth)/2 , 150);  // tak ma być srodek ekranu -> nowa_guzik->move((800-buttonWidth)/2 , 150);
-
-//bez tego stat_button->move((800-buttonWidth)/2 , 250);
-
-instrukcja_button->move((800-buttonWidth)/2 , 350);
-instrukcja_button->setFixedSize(125,42);
-  //instrukcja_button->setGeometry((800-(stat_button->width()))/2 , 350,80,50);
 
 
 nowa = new QPropertyAnimation(plansza, "size");
@@ -140,36 +128,12 @@ plansza->setScaledContents(true); // Ustawia, aby zdjęcie było wyskalowane i c
 plansza->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 
-
-// !!!! !!! connect(nowa_gra_button, &QPushButton::clicked, std::bind(&Widget::Start_gry, this, plansza, nowa, gra)); !!!!
-
-/* Zmieniona lambda na to co wyżej -/\ BIND TWORZY FUNKTOR
-connect(nowa_guzik, &QPushButton::clicked, [=](){
-if (stan == 0 ){
-       QSize startSize = plansza->size();
-       QSize endSize = QSize(startSize.width() * 2.026, startSize.height() * 2.026);
-
-     //nowa->setStartValue(startSize);
-       nowa->setEndValue(endSize);
-
-       // uruchomienie animacji
-       nowa->start();
-       nowa->setEasingCurve(QEasingCurve::InOutSine);  // ustawienie interpolacji na algorytm Lanczos
-       stan =1;
-       gra->Start_game();
-}
-});
-*/
-
-
-
 QPropertyAnimation *animation2 = new QPropertyAnimation(nowa_gra_button, "pos");
-int endValue = nowa_gra_button->pos().x()+ 250;
+int endValue = nowa_gra_button->pos().x()+ 325;
 animation2->setDuration(250);
 animation2->setEndValue(QPoint(endValue, nowa_gra_button->pos().y()));
 animation2->setPropertyName("pos");
 QParallelAnimationGroup *group = new QParallelAnimationGroup;
-
 group->addAnimation(animation2);
 
 
@@ -178,8 +142,7 @@ group->addAnimation(animation2);
 
 
 
-
-//strona 2
+//strona 2 - Opis gry
     QWidget *widget2= new QWidget();
 
 
@@ -192,7 +155,6 @@ group->addAnimation(animation2);
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Trzy podpowiedzi- uzupełniają one jedno losowe pole, które nie jest poprawnie rozwiązane."
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Opcja notatek- wpisywane wartości nie są brane pod uwagę- w dane pole można wpisać kilka wartości"
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Pauza- gracz w dowolnej chwili może zatrzymać rozgrywkę"
-                    "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Automatyczny zapis- gra jest automatycznie zapisywana"
                     "<br><center><font size = 7><b>Punktacja</b></font></center>"
                     "<br>Gracz otrzymuje bazowo 10 000 punktów."
                     "<br>Na liczbę zdobydych punktów wpłyają następujące czynniki:"
@@ -201,26 +163,22 @@ group->addAnimation(animation2);
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Błędy - za każdy błęd gracz traci 1000 punktów"
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Podpowiedzi - za każdą podpowiedź gracz traci 500 punktów"
                     "</font>");
+
     wstecz_instrukcja = new my_button("Wstecz",widget2);
-    wstecz_instrukcja->setFixedSize(125,42);
-    wstecz_instrukcja->move(420,650);
+    wstecz_instrukcja->setGeometry(420,650,125,42);
     QVBoxLayout *layout2 = new QVBoxLayout();
-
-
-
 
 
 
 QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-   layout2->addWidget(napis3);
-   layout2->addItem(spacer);
- //   layout2->addWidget(wstecz_instrukcja);
-   widget2->setLayout(layout2);
+layout2->addWidget(napis3);
+layout2->addItem(spacer);
+widget2->setLayout(layout2);
 layout2->setAlignment(Qt::AlignCenter);
 
 
-    QVBoxLayout *layout3 = new QVBoxLayout();
+  QVBoxLayout *layout3 = new QVBoxLayout();
 
   widget3->setLayout(layout3);
 
@@ -233,98 +191,78 @@ layout2->setAlignment(Qt::AlignCenter);
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addWidget(strony);
     setLayout(mainLayout);
-    poziomik = new Dif_level(this);
-    poziomik->move(nowa_gra_button->pos().x(),nowa_gra_button->pos().y()+50);
- poziomik->raise();
 
- connect(wstecz, SIGNAL(clicked()) , this , SLOT(Go_menu()));
+    poziomik = new Dif_level(this);
+    poziomik->move(nowa_gra_button->pos().x(),nowa_gra_button->pos().y()+35);
+    poziomik->raise();
+
+    connect(wstecz, SIGNAL(clicked()) , this , SLOT(Go_menu()));
     connect(wstecz_instrukcja, SIGNAL(clicked()) , this , SLOT(Show_instruction()));
     connect(instrukcja_button, SIGNAL(clicked()) , this , SLOT(Show_instruction()));
-   // instrukcja_button->move((800-buttonWidth)/2 , 250);
-   //TUTAJ CONNECT POKAZYWANIA SAT
     connect(stat_button, SIGNAL(clicked()) , this , SLOT(Statystyki()));
-
-
     connect(nowa_gra_button, &QPushButton::clicked,poziomik, &Dif_level::show_window);
-connect(nowa_gra_button, &QPushButton::clicked, stat_button, &QPushButton::hide);
+    connect(nowa_gra_button, &QPushButton::clicked, stat_button, [=](){
+        if (stat_button->isHidden())
+        {
+            stat_button->show();
+            instrukcja_button->show();
 
-    // !!  connect(nowa_gra_button, SIGNAL(clicked()), group, SLOT(start()));
+        }
+        else
+        {
+            stat_button->hide();
+            instrukcja_button->hide();
+
+        }
+        });
+
         connect(poziomik,SIGNAL(chosen()), animation2, SLOT(start())); //group
-level =1;
+        level =1;
 
 
 
     connect(poziomik, &Dif_level::buttonClicked, this, &Main_Window::lvlchoose);
- //TO JEST DO RESETU
 
-   //connect(poziomik,&Dif_level::chosen,this, std::bind(&Widget::Start_gry, this,  nowa));
-  // connect(poziomik, &Dif_level::buttonClicked, [=](){
- //poziomik->move(800,800);
-   //});
-
-
-gra = new Gra(widget1,user);
+    gra = new Gra(widget1,user);
 
 
 
-//connect(gra, &Gra::was_saved, this, &Main_Window::Start_from_file); // zrobnic lambde do pokazania guzika
 
-connect(gra,&Gra::was_saved,this, [=](){
-    wznow_button->show();
-    stan=2;
-continuie=true;});
+    connect(gra,&Gra::was_saved,this, [=](){
+        wznow_button->show();
+        stan=2;
+        continuie=true;});
 
-connect(wznow_button, &QPushButton::clicked , gra,[=](){
-    if(continuie)
-    {
-        QTime czas = licznik->getTime();
-        gra->Load(czas,level);
-        qDebug() << "Wczytany poziom trudności: " << level;
-        licznik->setTime(czas);
-        continuie= false;
-        connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
-    }
-
-});
+    connect(wznow_button, &QPushButton::clicked , gra,[=](){
+        if(continuie)
+        {
+            QTime czas = licznik->getTime();
+            gra->Load(czas,level);
+            qDebug() << "Wczytany poziom trudności: " << level;
+            licznik->setTime(czas);
+            continuie= false;
+            connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
+        }
+        });
 
 gra->show_resume();
 
-//connect(wznow_button, &QPushButton::clicked , gra, &Gra::Load);
-//gra->Load();
-//connect(gra, &Gra::was_saved , gra, &Gra::Load);
 
 connect(gra,&Gra::new_signal,poziomik, &Dif_level::show_window);
-
 connect(gra,&Gra::reset_time,licznik, &Licznik::reset);
-
-
 connect(gra,&Gra::new_signal,licznik, [=](){ licznik->setEnabled(false); licznik->stop(); });
-
 connect(poziomik, &Dif_level::chosen, licznik, [=](){ licznik->setEnabled(true);licznik->reset();licznik->start(); });
-
-/* OD TEGO
-connect(this,&Main_Window::closeApp,gra,&Gra::Save);
-connect(wstecz,&QPushButton::clicked,gra,&Gra::Save);
-*/
-
-connect(this, &Main_Window::closeApp, gra, [=]() {
+connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
     gra->Save(licznik->getTime(),level);
-
-});
-connect(wstecz, &QPushButton::clicked, gra, [=]() {
-    gra->Save(licznik->getTime(),level);
+Label_anim(zapis_label);
 });
 
 connect(gra, &Gra::full_filled,this,&Main_Window::Game_win);
-
-
 connect(statystyki_okno, &Statistics_Window::go_stat, stat_button, &QPushButton::click); //Przejscie do statystyk z okienka po wyhranej
 connect(statystyki_okno, &Statistics_Window::go_menu, wstecz, &QPushButton::click);//Przejscie do menu glownego po wygranej
 
-
-
-
 nowa_gra_button->raise();
+
 }
 
 Main_Window::~Main_Window()
@@ -351,7 +289,7 @@ void Main_Window::Statystyki()
         strony->setCurrentIndex(0);  // idz to menu glowne
     }
 }
-void Main_Window::Show_instruction() // Zmiana menu
+void Main_Window::Show_instruction() // Zmiana menu - instrukcja
 {
 
 
@@ -376,46 +314,37 @@ void Main_Window::Go_menu() // Zmiana menu
 if ( strony->currentIndex() ==0)
 {
     Wstecz();
-            stan = 2;
+   stan = 2;
 }
 }
 
 
 void Main_Window::Start_gry() // zwieksza rozmiar planszy+ pokazuje liczby
 {
+
 wstecz->show();
 uzytkownik->hide();
     if (stan == 0 ){//rozpoczynamy od małej planszy - nowa gra
         qDebug() <<"Nowa gra ";
-             // poziomik->move(nowa_gra_button->pos().x()+250,nowa_gra_button->pos().y()+50);
-             make_Bigger(true);
+              make_Bigger(true);
               stan =1;
               gra->Start_game(level);
               wznow_button->hide();
               stat_button->hide();
               licznik->show();
               licznik->start();
-              qDebug()<< "PIERWSZA GIERKA";
               connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
-              //tu dałem
-              /*od tego
-              connect(wstecz,&QPushButton::clicked,gra,&Gra::Save);
-              connect(this,&Main_Window::closeApp,gra,&Gra::Save);
-              */
-
-
-              connect(this, &Main_Window::closeApp, gra, [=]() {
+              connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
                   gra->Save(licznik->getTime(),level);
-              });
-              connect(wstecz, &QPushButton::clicked, gra, [=]() {
-                  gra->Save(licznik->getTime(),level);
+                  Label_anim(zapis_label);
               });
 
-
-
-
-
-wstecz->show();
+        wstecz->show();
+        if (user != "gu")
+        {
+          zapisz_button->show();
+          zapisz_button->raise();
+        }
        }
    else if (stan == 1)
 {
@@ -425,53 +354,38 @@ wstecz->show();
 
        connect(gra,&Gra::new_signal,licznik, [=](){ licznik->setEnabled(false); licznik->stop(); });
        gra->Start_game(level);
-       // gra->Reset(); ??
-          connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
-        licznik->reset();
+       connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
+       licznik->reset();
 connect(gra,&Gra::reset_time,licznik, &Licznik::reset);
 connect(gra,&Gra::new_signal,poziomik, &Dif_level::show_window);
-// tu dałem
-/*od tego
-connect(wstecz,&QPushButton::clicked,gra,&Gra::Save);
-connect(this,&Main_Window::closeApp,gra,&Gra::Save);
-*/
-connect(this, &Main_Window::closeApp, gra, [=]() {
+connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
     gra->Save(licznik->getTime(),level);
+    Label_anim(zapis_label);
 });
-connect(wstecz, &QPushButton::clicked, gra, [=]() {
-    gra->Save(licznik->getTime(),level);
-});
+
 
 connect(gra, &Gra::full_filled,this,&Main_Window::Game_win);
+if (user != "gu")
+{
+    zapisz_button->raise();
+}
 
 
-        qDebug()<< "NOWA GIERKA: " << level;
 }
         else if (stan == 2) // stworzenie nowej  gry jezeli dałem wstecz
-    {
-        //poziomik->move(nowa_gra_button->pos().x()+250,nowa_gra_button->pos().y()+50);
+    {     
         make_Bigger(true);
         delete gra;
         gra = new Gra(widget1,user);
 
-        connect(gra,&Gra::new_signal,licznik, [=](){ licznik->setEnabled(false); licznik->stop(); });
-        //tu dałem
-
-        /*od tego
-        connect(wstecz,&QPushButton::clicked,gra,&Gra::Save);
-        connect(this,&Main_Window::closeApp,gra,&Gra::Save);
-        */
-        connect(this, &Main_Window::closeApp, gra, [=]() {
+        connect(gra,&Gra::new_signal,licznik, [=](){ licznik->setEnabled(false); licznik->stop(); });       
+        connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
             gra->Save(licznik->getTime(),level);
-        });
-        connect(wstecz, &QPushButton::clicked, gra, [=]() {
-            gra->Save(licznik->getTime(),level);
+             Label_anim(zapis_label);
         });
 
-
-        gra->Start_game(level);
-        // gra->Reset(); ??
-           connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
+        gra->Start_game(level);     
+        connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
          licznik->reset();
          licznik->show();
          licznik->start();
@@ -481,6 +395,11 @@ connect(gra, &Gra::full_filled,this,&Main_Window::Game_win);
         wznow_button->hide();
         stat_button->hide();
         connect(gra, &Gra::full_filled,this,&Main_Window::Game_win);
+        if (user != "gu")
+                {
+                  zapisz_button->show();
+                  zapisz_button->raise();
+                }
     }
 
 
@@ -499,7 +418,6 @@ void Main_Window::Koniec()
             emit closeApp();
             confirm_exit= true;
             this->close();
-
         }
 
 
@@ -528,52 +446,65 @@ void Main_Window::closeEvent(QCloseEvent *event)
 
 void Main_Window::Wstecz() // Powrót do menu głównego podczas gry.
 {
-
+zapisz_button->hide();
 uzytkownik->show();
     make_Bigger(false);
     gra->hide();
     licznik->stop();
     licznik->hide();
     QPropertyAnimation *animation3 = new QPropertyAnimation(nowa_gra_button, "pos");
-    int endValue = nowa_gra_button->pos().x()- 250;
+    int endValue = nowa_gra_button->pos().x()- 325;
     animation3->setDuration(250);
     animation3->setEndValue(QPoint(endValue, nowa_gra_button->pos().y()));
     animation3->setPropertyName("pos");
     animation3->start();
 
-
-    //
     wstecz->hide();
     stat_button->show();
+    instrukcja_button->show();
     wznow_button->show();
+    wyloguj->show();
+    poziomik->hide();
 }
 
 void Main_Window::Wznow()
 {
+    if (user !="gu")
+    {
+        zapisz_button->show();
+        zapisz_button->raise();
+    }
+
     uzytkownik->hide();
     if (stan == 2)
     {
                 make_Bigger(true);
                 QPropertyAnimation *animation3 = new QPropertyAnimation(nowa_gra_button, "pos");
-                int endValue = nowa_gra_button->pos().x()+ 250;
+                int endValue = nowa_gra_button->pos().x()+ 325;
                 animation3->setDuration(250);
                 animation3->setEndValue(QPoint(endValue, nowa_gra_button->pos().y()));
                 animation3->setPropertyName("pos");
                 animation3->start();
                 QObject::connect(animation3, &QPropertyAnimation::finished, [=]() {
                 gra->show();
-                qDebug()<<"Njanowsza zmiana";
-
                gra->setEnabled(true);
 
 
  });
-qDebug() << "TUTAJ";
                licznik->show();
                licznik->start();
 
                wstecz->show();
+stat_button->hide();
+  poziomik->hide();
+instrukcja_button->hide();
+wyloguj->hide();
                stan =1;
+               if (user !="gu")
+                              {
+                                  zapisz_button->show();
+                                  zapisz_button->raise();
+                              }
     }
 }
 
@@ -581,15 +512,15 @@ qDebug() << "TUTAJ";
 void Main_Window::make_Bigger(bool bigger)
 {
     if (bigger)
-{
-         poziomik->move(nowa_gra_button->pos().x()+250,nowa_gra_button->pos().y()+50);
+{//250
+         poziomik->move(nowa_gra_button->pos().x()+315,nowa_gra_button->pos().y()+45);
+poziomik->change_size();
         QSizeF startSize = plansza->size();
         QSizeF endSize = QSizeF(startSize.width() +258.552, startSize.height() +258.552);
       nowa->setStartValue(startSize);
         nowa->setEndValue(endSize);
         nowa->start();
-        nowa->setEasingCurve(QEasingCurve::InOutSine); //InOutSine
-qDebug() << "zwiekszanie";
+        nowa->setEasingCurve(QEasingCurve::InOutSine);
     }
     else if (!bigger)
     {
@@ -601,8 +532,8 @@ qDebug() << "zwiekszanie";
         // uruchomienie animacji
         nowa->start();
         nowa->setEasingCurve(QEasingCurve::InOutSine);
-qDebug() << "zmniejszanie";
-    poziomik->move(nowa_gra_button->pos().x()-250,nowa_gra_button->pos().y()+50);
+        poziomik->change_size();
+    poziomik->move(nowa_gra_button->pos().x()-315,nowa_gra_button->pos().y()+45);
     }
 }
 
@@ -617,8 +548,6 @@ void Main_Window::Start_from_file() // connectemn z was_saved z gra
 
 void Main_Window::onLogoutButtonClicked()
 {
-    qDebug()<<"Wylogowano";
-
     emit loggedOut();
     delete this;
 }
@@ -629,5 +558,21 @@ void Main_Window::Game_win()
     licznik->stop();
     licznik->setEnabled(false);
     statystyki_okno->Win_Sumarry(level,gra->Get_mistakes(),gra->Get_hints_used(),licznik->getTime());    
-
+}
+void Main_Window::Label_anim(QLabel *l)
+{
+    l->show();
+    QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(l);
+    l->setGraphicsEffect(e);
+    QPropertyAnimation *anim = new QPropertyAnimation(e, "opacity");
+    anim->setDuration(250); // czas trwania animacji w ms
+    anim->setStartValue(0); // wartość początkowa przezroczystości
+    anim->setEndValue(1); // wartość końcowa przezroczystości
+    anim->start();
+//opoznienie animacji wygasania
+    QTimer::singleShot(2500, [=]() { //1500
+        anim->setStartValue(1.0);
+        anim->setEndValue(0.0);
+        anim->start(QPropertyAnimation::DeleteWhenStopped);
+    });
 }

@@ -1,6 +1,7 @@
 #ifndef GRA_H
 #define GRA_H
 
+#include<string>
 #include<vector>
 #include <utility>
 #include<QPushButton>
@@ -8,10 +9,13 @@
 #include <QWidget>
 #include<QList>
 #include<QLineEdit>
-#include<QGridLayout>
 #include<QCheckBox>
 #include<QPainter>
 #include<QTime>
+#include<QIntValidator>
+#include<QPropertyAnimation>
+#include<QParallelAnimationGroup>
+#include <QGraphicsOpacityEffect>
 //#include"test2.h"
 #include"sudoku.h"
 #include"notatki.h"
@@ -19,6 +23,7 @@
 #include"hint.h"
 #include"savegame.h"
 #include"Result_struct.h"
+#include"my_checkbox.h"
 
 class Gra : public QWidget
 {
@@ -28,19 +33,11 @@ class Gra : public QWidget
 
 
 public:
-SaveGame savegame;
-        QLineEdit *m_textFields[9][9];
-        QPushButton *m_button[9][9];
-        QLabel *m_labels[9][9];
-        Notatki *notatki[9][9];
-        QCheckBox *notatki_on_off;
-        Mistakes *mistakes;
-        Hint *hints;
-int h=0;
-int m=0;
+
+
 void Pause();
 void Start_game(int level);
-void Reset(); // wyczyszczenie kontenerow
+void Reset();
 void show();
 void Load(QTime &time, int &lvl);
 void show_resume();
@@ -59,8 +56,18 @@ void Save(QTime time, int &lvl);
 
 
 private:
+SaveGame savegame;
+QLineEdit *m_textFields[9][9];
+QPushButton *m_button[9][9];
+QLabel *m_labels[9][9];
+Notatki *notatki[9][9];
+my_checkbox *notatki_on_off;
+Mistakes *mistakes;
+Hint *hints;
+QLabel *notatki_label;
 bool is_pasue;
-
+int h=0;
+int m=0;
 int last_col=0;
 int last_row=0;
 int filled=0;
@@ -83,7 +90,7 @@ void new_signal(); // emitowany w przypadku nowej gry- po przegranej
 void reset_time();
 void full_filled();
 void was_saved();
-//void loss(int arg);
+
 
 
 

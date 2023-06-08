@@ -1,19 +1,7 @@
 #include "gra.h"
 
-#include <QLabel>
-#include<QVBoxLayout>
-#include<QHBoxLayout>
-#include<QPushButton>
-#include<QLineEdit>
-#include<QIntValidator>
-#include<QWidget>
-#include<QPropertyAnimation>
-#include<QParallelAnimationGroup>
-#include <QGraphicsOpacityEffect>
-#include<vector>
-#include<string>
 
-// LABEL SA NIEPOTRZEBNE WYWALIĆ§
+
 
 
 
@@ -49,11 +37,15 @@ hints=new Hint(this);
 connect(hints, &Hint::add_hint,this,&Gra::add_hint);
 
 connect(this,&Gra::full_filled,this,&Gra::Win);
-//hints->lower();
-//connect(hints,&Hint::too_many,this,&Gra::Pause);
-notatki_on_off = new QCheckBox(this);
+notatki_on_off = new my_checkbox(this);
 notatki_on_off-> setText("Notatki");
-notatki_on_off->move(680,125);
+notatki_on_off->move(680,115); //680,125
+notatki_on_off->setFixedSize(155,35);
+notatki_on_off->setLeftText(" WYŁ");
+notatki_on_off->setRightText("WŁ");
+notatki_label = new QLabel(this);
+notatki_label->setText("<font size = 5>Notatki</font>");
+notatki_label->move(725,90);
 is_pasue=true;
 full_board=std::vector<std::vector<int>>(9,std::vector<int>(9, {0})); //full_board=vector<vector<Komorka>>(9,vector<Komorka>(9, {0, false}));
 removed_board =std::vector<std::vector<int>>(9,std::vector<int>(9, {0})); //removed_board =vector<vector<Komorka>>(9,vector<Komorka>(9, {0, false}));
@@ -78,7 +70,6 @@ void Gra::Check(int row, int col,std::vector<std::vector<int>>full_board,bool fi
 
   if (m_button[row][col]->text() == QString::number(full_board[row][col]))
   {
-     // filled -=1;
       Change_filled(true);
       hints->delete_cord(row,col);
       m_button[row][col]->setStyleSheet("QPushButton{background: transparent;color : #3f73dd}");
@@ -91,27 +82,6 @@ void Gra::Check(int row, int col,std::vector<std::vector<int>>full_board,bool fi
 }
   }
 }
-
-//KOPIA MEOTDY CHECK
-/*void Gra::Check(int row, int col,std::vector<std::vector<int>>full_board)
-
-{
-  if (m_button[row][col]->text() != QString::number(full_board[row][col]))
-  {
-        m_button[row][col]->setStyleSheet("QPushButton{background: transparent;color : red}");
-        mistakes->Add_mistake();
-
-  }
-  else
-  {
-     // filled -=1;
-      Change_filled(true);
-      hints->delete_cord(row,col);
-      m_button[row][col]->setStyleSheet("QPushButton{background: transparent;color : #3f73dd}");
-  }
-}
-*/
-
 
 
 
@@ -129,23 +99,17 @@ void Gra::Highlight(int row,int col,std::vector<std::vector<int>>removed_board) 
     {
         if (removed_board[row][c] == 0) // jeżeli rowna 0- przycisk
             {
-
-     //  !!!!! m_button[row][c]->setStyleSheet("background-color: #e5ebf2");// //("color: currentColor; background-color: #e5ebf2")
-m_textFields[row][c]->setStyleSheet("background-color: #e5ebf2;border: 0px solid red");
+             m_textFields[row][c]->setStyleSheet("background-color: #e5ebf2;border: 0px solid red");
             }
         else
-           {
-          m_labels[row][c]->setStyleSheet("background-color: #e5ebf2;" );
-          }
+            {
+            m_labels[row][c]->setStyleSheet("background-color: #e5ebf2;" );
+            }
     }
    for (int r = 0; r < 9; r++) // sprawdzanie kolumn
-    {
-       // m_textFields[r][col];
-       // m_button[r][col];
-      //m_labels[r][col];
+    {     
         if (removed_board[r][col] == 0) // jeżeli jest rózna od zera- przycisk
             {         
-        // !!!! m_button[r][col]->setStyleSheet("background-color: #e5ebf2");
             m_textFields[r][col]->setStyleSheet("background-color: #e5ebf2;border: 0px solid red");
             }
         else
@@ -153,9 +117,7 @@ m_textFields[row][c]->setStyleSheet("background-color: #e5ebf2;border: 0px solid
             m_labels[r][col]->setStyleSheet("background-color: #e5ebf2" );
             }
     }
- // !!!!!m_button[row][col]->setStyleSheet("background-color: #c6ddf9 ");//"background-color: #c6ddf9 "+
  m_textFields[row][col]->setStyleSheet("background-color: #c6ddf9;border: 0px solid red" ); //"background-color: #c6ddf9 "+
- //notatki[row][col];
 }
 void Gra::Offlight(int row,int col,std::vector<std::vector<int>>removed_board)
 {
@@ -163,7 +125,6 @@ void Gra::Offlight(int row,int col,std::vector<std::vector<int>>removed_board)
     {
         if (removed_board[row][c] == 0) // jeżeli rowna 0- przycisk
             {
-        // !!!! m_button[row][c]->setStyleSheet("QPushButton{background: white; color: currentColor;}" );
           m_textFields[row][c]->setStyleSheet("background-color: transparent;border: 0px solid red");
             }
         else
@@ -173,12 +134,8 @@ void Gra::Offlight(int row,int col,std::vector<std::vector<int>>removed_board)
     }
    for (int r = 0; r < 9; r++) // sprawdzanie kolumn
     {
-       // m_textFields[r][col];
-       // m_button[r][col];
-      //m_labels[r][col];
         if (removed_board[r][col] == 0) // jeżeli jest rózna od zera- przycisk
             {
-       // !!!! m_button[r][col]->setStyleSheet("QPushButton{background: white; color: currentColor;}" );
          m_textFields[r][col]->setStyleSheet("background-color: transparent;border: 0px solid red");
             }
         else
@@ -187,44 +144,23 @@ void Gra::Offlight(int row,int col,std::vector<std::vector<int>>removed_board)
             }
 
     }
-//Check(row,col,full_board);
 }
 
 
 void Gra::Pause()
 {
 if (is_pasue)
-     {
-    qDebug()<< "Jest pauza";
-    QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect();
-       blurEffect->setBlurRadius(36);   
-       this->setGraphicsEffect(blurEffect);
-this ->setEnabled(false);
-
-       /*
-       for(int i = 0; i < 9; i++) {
-           for(int j = 0; j < 9; j++) {
-              if (removed_board[i][j] == 0 )
-                  m_button[i][j]->setEnabled(false);
-           }
-      }
-      */
-       is_pasue=false;
-
-
-}
+    {
+        QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect();
+        blurEffect->setBlurRadius(36);
+        this->setGraphicsEffect(blurEffect);
+        this ->setEnabled(false);
+        is_pasue=false;
+    }
 else
 {
-    qDebug()<<"Koniec pauszy";
     this ->setEnabled(true);
-        this->setGraphicsEffect(nullptr);
-   /* for(int i = 0; i < 9; i++) {
-        for(int j = 0; j < 9; j++) {
-           if (removed_board[i][j] == 0 )
-            m_button[i][j]->setEnabled(true);
-        }
-   }
-   */
+    this->setGraphicsEffect(nullptr);
     is_pasue=true;
 }
 
@@ -235,36 +171,17 @@ else
 void Gra::Create_Sudoku(int difficulty)
 {
     int dif=difficulty;
-    qDebug() <<"przed stworzeniuem obiektu sudoku: ";
-
-
-        Sudoku wartoscii(removed_board,full_board,dif);
-
-    qDebug() <<"po stworzeniu obiektu sudoku: ";
-   //delete wartosci;
-   qDebug()<<"  create sudoku";
-
+    Sudoku wartoscii(removed_board,full_board,dif);
 }
 
 
 void Gra::Fill_Board()
 {
-    for(int row = 0; row < 9; row++) {
-               for(int col = 0; col < 9; col++){
-                   qDebug() << removed_board[row][col];
-    }
-    }
-
-
     int j = 0;
       for(int row = 0; row < 9; row++) {
           int i =0;
                  for(int col = 0; col < 9; col++)
                  {
-
-
-
-
                      // Jeżeli jest wpisana
                     if (removed_board[row][col] != 0 )
                      {
@@ -272,97 +189,59 @@ void Gra::Fill_Board()
         cyferka->setText(QString::number(removed_board[row][col]));
         cyferka->setFixedSize(50, 50); //55
         cyferka->setFont(QFont("Arial", 40));
-       cyferka->setAlignment(Qt::AlignCenter);
-       cyferka->setStyleSheet("QLabel { border: none;}");
-       // cyferka->setText("5");
+        cyferka->setAlignment(Qt::AlignCenter);
+        cyferka->setStyleSheet("QLabel { border: none;}");
         m_labels[row][col]=cyferka;
         m_labels[row][col]->move(56+i,56+j);
-
                      }
-
-
-    else {
-
-
-                     QLineEdit *textField = new QLineEdit(this);
-                     textField->setFixedSize(51, 51); //55
-                     textField->setAlignment(Qt::AlignCenter);
-
-                     textField->setValidator(new CustomValidator());  //validator
-                     m_textFields[row][col] = textField;
-                     textField->setFont(QFont("Times", 1));
-
-
-
-                   //  textField->setStyleSheet("QLineEdit:hover { border: none; }");  //NIE MA TAKIEGO LAGA JAK SIE JE ZAZNACZA
-                     QPushButton *button = new QPushButton(this);
-
-                     //m_textFields[row][col]->move(53+i,53+j); //50
-                     //m_button[row][col]->move(53+i,53+j);
+                     else
+                    {
+                    QLineEdit *textField = new QLineEdit(this);
+                    textField->setFixedSize(51, 51); //55
+                    textField->setAlignment(Qt::AlignCenter);
+                    textField->setValidator(new CustomValidator());  //validator
+                    m_textFields[row][col] = textField;
+                    textField->setFont(QFont("Times", 1));
+                    QPushButton *button = new QPushButton(this);
                     hints->add_cord(row,col);
                     Change_filled(false);
-                     button->setFixedSize(50, 50);//55 //50
-                     button->setText(" ");
-                   // button->setStyleSheet("QPushButton{background: transparent}");
+                    button->setFixedSize(50, 50);//55 //50
+                    button->setText(" ");
                     button->setFont(QFont("Times", 40));
                     button->setStyleSheet("QPushButton { border: none;background: transparent}");
-                     m_button[row][col] = button;
-     //button->setStyleSheet("QPushButton { border: 3px solid green}");
-
-
-                    // m_textFields[row][col]->hide();
+                    m_button[row][col] = button;
                     m_textFields[row][col]->setStyleSheet("background-color: transparent;border: 0px solid red");
-                     m_textFields[row][col]->move(56+i,56+j); //50 //53
-                     m_button[row][col]->move(56+i,56+j);
-
-                     notatki[row][col] = new Notatki(this);
-
-                     notatki[row][col]->move(i,j);  //580 350
-                     notatki[row][col]->lower();
-
-                  //   notatki[row][col]->set_notes(0);
-
-                 //     notatki[row][col]->hide();
-                     // notatki[row][col]->lower();
-     /*                connect(notatki_button, &QPushButton::clicked, [=](){
-                     //  notatki_button->raise();  !!!!
-                          notatki[row][col]->show();
-                            //  notatki[row][col]->raise();
-               });
-                */
-    //  notatki[row][col]->hide();
-
+                    m_textFields[row][col]->move(56+i,56+j); //50 //53
+                    m_button[row][col]->move(56+i,56+j);
+                    notatki[row][col] = new Notatki(this);
+                    notatki[row][col]->move(i,j);  //580 350
+                    notatki[row][col]->lower();
                     connect(m_button[row][col], &QPushButton::clicked, [=]() {
-                      Offlight(last_row,last_col,removed_board);
-                            m_textFields[row][col]->show();
-                            m_textFields[row][col]->setFocus();
-                            m_textFields[row][col]->selectAll();
-
-                         Highlight(row,col,removed_board);
-
-                            last_row = row;
-                            last_col =col;
-
-                            });
-
+                    Offlight(last_row,last_col,removed_board);
+                    m_textFields[row][col]->show();
+                    m_textFields[row][col]->setFocus();
+                    m_textFields[row][col]->selectAll();
+                    Highlight(row,col,removed_board);
+                    last_row = row;
+                    last_col =col;
+                    });
      connect(m_textFields[row][col], &QLineEdit::textChanged, this, [=]() {
-         // Pobranie tekstu z QLineEdit
-         QString text = m_textFields[row][col]->text();
-         // Konwersja tekstu na liczbę całkowitą
-         int value = text.toInt();
+     // Pobranie tekstu z QLineEdit
+     QString text = m_textFields[row][col]->text();
+     // Konwersja tekstu na liczbę
+     int value = text.toInt();
 
-         if (m_button[row][col]->text() == m_textFields[row][col]->text() and !notatki_on_off->isChecked())
+     if (m_button[row][col]->text() == m_textFields[row][col]->text() and !notatki_on_off->isChecked())
         {
             if (m_button[row][col]->text() == QString::number(full_board[row][col]))
-            { Change_filled(false);
-             }
-
+            {
+                Change_filled(false);
+            }
              m_button[row][col]->setText(" ");
              m_textFields[row][col]->show();
              m_textFields[row][col]->setFocus();
              m_textFields[row][col]->selectAll();
              hints->add_cord(row,col);
-
          }
 
 
@@ -400,8 +279,6 @@ void Gra::Fill_Board()
                  }i+=56;}
       j +=56;
       }
-  qDebug()<<"  fill board";
- // want_save =  true;
 }
 
 
@@ -416,7 +293,6 @@ if (option ==1) // restart
 }
 else if (option ==2 ) // nowa gra
 {
-    qDebug() << "nowa";
     this->setEnabled(false);
     emit new_signal();
 }
@@ -428,10 +304,9 @@ else if (option ==2 ) // nowa gra
 
 
 
-// ??Czy nie użyć tego gdy rozpoczynana jest nowa gra zeby zwolnic pamiec- wtedy dac do destruktora albo Widget::start_gry else if=1
+
 void Gra::Reset()
 {
-qDebug()<<"Resetowanie";
   for(int i=0; i<9;i++)
   {
      for(int j=0; j<9;j++)
@@ -483,8 +358,6 @@ void Gra::Change_filled(bool add)
 void Gra::Win()
 {
     this->setEnabled(false);
-
-    qDebug()<<"WYGRAŁES";
 }
 
 void Gra::show()
@@ -507,31 +380,23 @@ void Gra::Save(QTime time,int &lvl)
 
     if (want_save and filled !=0)
        {
-        qDebug()<<"ZAPIS";
         savegame.make_save(full_board,removed_board,m_button,hints->return_hint(),mistakes->return_mis(),user,time.toString("hh:mm:ss").toStdString(),lvl);
-        qDebug() << "------------CZAS GRY: " << time << "-----";
        }
+
+
 }
 
 void Gra::Load(QTime &time, int &lvl)
 {
-
-    qDebug() << "dostpeny";
    time=QTime::fromString(QString::fromStdString(savegame.load_save(full_board,removed_board,m_button,h,m,user,lvl)), "hh:mm:ss");
-   //savegame.load_save(full_board,removed_board,m_button,h,m,user); // jezeli jest save to po wznow to zrob
-    qDebug() << "Ile podpowiezi: "<<h;
     hints->set_hint(h);
     Fill_Board();
     Set_Buttons();
-qDebug() << "odczytane bledy" << m;
 for (int i =0; i < m ; i++)
 {
 
     mistakes->Add_mistake();
 }
-
-qDebug() << "ODCZYTANY CZAS Z GRA: " << time;
-
 }
 
 
@@ -539,9 +404,7 @@ void Gra::show_resume()
 {
     if (savegame.is_file(user))
     {
-        qDebug() << "Odczytano save";
         emit was_saved();
-
     }
 
 }
@@ -553,11 +416,6 @@ void Gra::Set_Buttons()
 {
    for (unsigned int i = 0; i<savegame.get_buttons().size() ; i++ )
     {
-    /*    qDebug() <<"ROW" <<  std::get<0>(savegame.get_buttons()[i]);           //row
-          qDebug() <<"COL" << std::get<1>(savegame.get_buttons()[i]);            //col
-          qDebug() <<"NUM" <<  std::get<2>(savegame.get_buttons()[i]);           //num
-    */
-
       m_button[ std::get<0>(savegame.get_buttons()[i])][ std::get<1>(savegame.get_buttons()[i])]->setText(QString::number(std::get<2>(savegame.get_buttons()[i])));
       Check(std::get<0>(savegame.get_buttons()[i]),std::get<1>(savegame.get_buttons()[i]),full_board,true);
     }
@@ -566,14 +424,12 @@ void Gra::Set_Buttons()
 
 int Gra::Get_mistakes()
 {
-    qDebug() << "Popełniono " << mistakes->return_mis() << " błedow";
    return mistakes->return_mis();
 }
 
 
 int Gra::Get_hints_used()
 {
-    qDebug() << "skorzystanmo z " << hints->return_hint() << "Podpowiedzi ";
    return hints->return_hint();
 }
 
@@ -590,7 +446,6 @@ void Gra::setEnabled(bool enabled)
    if (enabled == true and is_pasue==false)
     {
        this->QWidget::setEnabled(enabled);
-       qDebug() << "to jest";
        is_pasue = true;
     }
 

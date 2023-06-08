@@ -6,6 +6,7 @@
 #include <QWidget>
 #include<QPushButton>
 #include<QLabel>
+#include"my_button.h"
 class Hint : public QWidget
 {
     Q_OBJECT
@@ -18,15 +19,15 @@ void set_hint(int num);
 int return_hint();
     std::pair<int,int> show_hint();
 private:
-    QPushButton *button;
+    my_button *button;
      int count;
      std::vector<std::pair<int,int>>pola;
 private slots:
     void changetext();
 
 signals:
-void add_hint();
-void enough();
+    void add_hint();
+    void enough();
 };
 
 #endif // HINT_H

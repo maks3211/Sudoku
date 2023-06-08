@@ -31,15 +31,7 @@ std::filesystem::create_directories(docPath);
 
 void SaveGame::make_save(std::vector<std::vector<int>>&full_board,std::vector<std::vector<int>>&removed_board ,QPushButton *m_button[9][9],int hint,int mis, std::string user,std::string time, int lvl) //vector<vector<int>>full_board,vector<vector<int>>removed_board ,QPushButton *m_button[9][9]
 {
-std::cout<<"zapisywanie";
-
 std::filesystem::path copy = docPath;
-
-
-//std::ofstream plik(docPath /="Test2.txt");
-
-
-//std::ofstream plik(copy /="Test2.txt");
 std::ofstream plik(copy /=user+".txt");
 if (plik.is_open())
 {
@@ -58,7 +50,6 @@ if (plik.is_open())
                     plik << removed_board[r][c];
                 }
            }
-           //plik.seekp(-1, std::ios_base::cur);
            plik << std::endl;
     }
 plik <<"p" <<hint << mis<<lvl<<time;
@@ -72,8 +63,7 @@ std::string SaveGame::load_save(std::vector<std::vector<int>>&full_board,std::ve
 {
     std::filesystem::path copy = docPath;
     std:: fstream plik(copy /=user+".txt");
-    //int a;
-    //std::string napis; 
+
     int num; //zmienna do przechowywanie kolejnych odczytanych danych
     char z;
     int row =0;
@@ -81,7 +71,6 @@ std::string SaveGame::load_save(std::vector<std::vector<int>>&full_board,std::ve
     int last_row=0;
     int last_col=0;
     std::string time;
-    //plik.peek() == std::ifstream::traits_type::eof(); <- czy plik nie jest pusty plik.is_open() && !(plik.peek() == std::ifstream::traits_type::eof())
     if (plik.is_open() && !(plik.peek() == std::ifstream::traits_type::eof())){ //plik.is_open() and !(plik.peek() == std::ifstream::traits_type::eof())
     while (!plik.eof()){
 
@@ -91,7 +80,6 @@ std::string SaveGame::load_save(std::vector<std::vector<int>>&full_board,std::ve
          num = std::stoi(std::string(1, z));
          full_board[row][col]=num;
          removed_board[row][col]=num;
-         qDebug () << "kratka: (row, col)" << row<<col;
          set_index(row,col);
 
         }
@@ -101,39 +89,28 @@ std::string SaveGame::load_save(std::vector<std::vector<int>>&full_board,std::ve
              num = std::stoi(std::string(1, z));
              full_board[row][col]=num;
              removed_board[row][col]=0;
-             qDebug () << "kratka: (row, col)" << row<<col;
-             //qDebug () << "Usuniete: " << num;
-
-
-              last_row=row;
-              last_col=col;
-              set_index(row,col);
+             last_row=row;
+             last_col=col;
+             set_index(row,col);
 
 
         }
         else if (z == ';')
         {
          plik >> z;
-         // m_button[row][col]->setText(QString(QChar::fromLatin1(z)));
          num =  std::stoi(std::string(1, z));
-        // qDebug () << "Guzik: " << num;
         for_buttons.emplace_back(last_row,last_col,num);
-        qDebug() << "Powinno byc zero:  " <<removed_board[row][col];
-        qDebug () << "kratka: guzik (row, col)" << row<<col;
-
         }
 
 
         if (z == 'p')
         {
-           plik >> z;
-           num =  std::stoi(std::string(1, z));
-           qDebug () << "podpowiedzi : " << num;
-           hint = num;
-           plik >> z;
-           num =  std::stoi(std::string(1, z));
-           mis = num;
-          qDebug () << "bledy : " << mis;
+          plik >> z;
+          num =  std::stoi(std::string(1, z));
+          hint = num;
+          plik >> z;
+          num =  std::stoi(std::string(1, z));
+          mis = num;
           plik >>z;
           num =  std::stoi(std::string(1, z));
           lvl = num;
@@ -146,16 +123,12 @@ for (int i = 0 ; i <8;i++ )
 }
         }
     }
-    qDebug ()<<"KONIEC WHILE" << QString::fromStdString(time);
 return time;
-   // return true;
+
 }
 
     else
     {
-
-        qDebug() << "Brak pliku";
-
         time = "00:00:00";
         return time;
     }
@@ -194,7 +167,6 @@ void SaveGame::set_index(int &row, int &col)
  void SaveGame::Change_username(std::string new_name, std::string old_name)
  {
      std::filesystem::path copy = docPath;
-     std::cout << " PO ZMINAIE : " << copy;
      std::filesystem::path oldFilePath = docPath / (old_name + ".txt");
      std::filesystem::path newFilePath = docPath / (new_name + ".txt");
      if (std::filesystem::exists(oldFilePath)) {
@@ -204,3 +176,11 @@ void SaveGame::set_index(int &row, int &col)
  }
 
 
+ void SaveGame::remove_file(std::string user)
+ {
+        std::filesystem::path copy = docPath/= user+ ".txt";
+        if (std::filesystem::exists(copy))
+            {
+            std::filesystem::remove(copy);
+            }
+ }

@@ -13,24 +13,23 @@
 #include<QPoint>
 #include"user.h"
 #include"warnings.h"
-
+#include"my_button.h"
 class Login_Window_Reg : public QWidget
 {
     Q_OBJECT
-//private:
 private:
     QLabel *text;
     QLineEdit *login;
     QLineEdit *password;
     QLineEdit *password_p;
-    QPushButton *reg;
-    QPushButton *back;
+    my_button *reg;
+    my_button *back;
     User u;
     QWidget *page1= new QWidget();
     Warnings *warnings;
 
     void bad_input(int a); //podanie błędnego hasła/ loginu
-void Clear(int a);
+    void Clear(int a);
 public:
     explicit Login_Window_Reg(QWidget *parent = nullptr);
 
@@ -41,7 +40,7 @@ private slots:
     void add_account();
 
 signals:
-void go_back();
+    void go_back();
 };
 
 #endif // LOGIN_WINDOW_REG_H

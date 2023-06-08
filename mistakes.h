@@ -14,7 +14,7 @@ public:
     void Add_mistake();
     int return_mis();
 private:
-    QMessageBox * box; //chyba nie uzywane
+
    QLabel *mistakes;
    QLabel *hint_label;
    QPushButton *hint_button;
@@ -29,7 +29,6 @@ signals:
 void too_many();
 void new_game(int id);
 void restart();
-//void add_mistake_signal();
 };
 
 #endif // MISTAKES_H

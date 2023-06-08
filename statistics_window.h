@@ -13,7 +13,7 @@
 #include<QStandardItemModel>
 #include"Result_struct.h"
 #include"statistics.h"
-
+#include"my_button.h"
 class Statistics_Window : public QWidget
 {
     Q_OBJECT
@@ -29,7 +29,7 @@ private:
     QStandardItemModel* model;
     QComboBox *player_choice;
     Statistics statystyki;
-    QPushButton *back_button;
+    my_button *back_button;
     void Choice();
     void Set_best(int player);
     void Remove_rows();

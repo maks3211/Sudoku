@@ -41,14 +41,9 @@ private:
     int stan = 0 ;
     std::string user;
     QStackedWidget *strony = new QStackedWidget;
-
-
-   // QPixmap scaledImage;
-   // QLabel zdjlabel;
     QLabel *plansza;
     QWidget *widget1;
     QPropertyAnimation *nowa;
-  //  QPushButton *nowa_gra_button;
     my_button *nowa_gra_button;
     my_button *wznow_button;
     my_button *stat_button;
@@ -57,15 +52,15 @@ private:
     my_button *wyjdz_button;
     my_button *wstecz;
     my_button *wyloguj;
+    my_button *zapisz_button;
+    QLabel *zapis_label;
     QLabel *uzytkownik;
     Licznik *licznik;
     Gra *gra;
-
     Statistics_Window *statystyki_okno;
-
-    //
-     Dif_level *poziomik;
+    Dif_level *poziomik;
     int level;
+    void Label_anim(QLabel *l);
     void make_Bigger(bool bigger);
 private slots:
     void lvlchoose(int buttonId);

@@ -23,8 +23,7 @@ warrning->setStyleSheet("QLabel{font-size:14px;}"  );
 
 
 
-//warrning ->hide();
-    //login = new QLineEdit(page1);
+
     login = new QLineEdit(this);
     login->setPlaceholderText("Login");
     login->setFixedSize(165,35);
@@ -39,7 +38,6 @@ warrning->setStyleSheet("QLabel{font-size:14px;}"  );
     password = new QLineEdit(page1);
     password->setPlaceholderText("Hasło");
     password->setEchoMode(QLineEdit::Password);
-   // password ->move(350,75);
     password->setFixedSize(165,35);
     password->setStyleSheet("QLineEdit {"
                         "border-radius: 15px;"
@@ -49,23 +47,24 @@ warrning->setStyleSheet("QLabel{font-size:14px;}"  );
 
 
 
-login_button = new QPushButton(page1);
-login_button ->setText("Zaloguj się");
+login_button = new my_button("Zaloguj się",page1);
+
 login_button->setFixedSize(165,35);
 
 
 
 
-guest_button = new QPushButton(page1);
-guest_button ->setText("Graj jako Gość");
+guest_button = new my_button("Graj jako Gość",page1);
+
 guest_button->setFixedSize(165,35);
 
-new_account=new QPushButton(page1);
-new_account ->setText("Zarejestruj się");
+new_account=new my_button("Zarejestruj się",page1);
+
 new_account->setFixedSize(165,35);
 
-edit = new QPushButton(page1);
-edit ->setText("Edytuj konto");
+edit = new my_button("Edytuj konto",page1);
+
+
 edit->setFixedSize(165,35);
 
 
@@ -74,8 +73,8 @@ edit->setFixedSize(165,35);
 
 
 
-quit_button = new QPushButton(page1);
-quit_button ->setText("Wyjdź");
+
+quit_button = new my_button("Wyjdź",page1);
 quit_button->setFixedSize(165,35);
 
 
@@ -93,27 +92,17 @@ layout1->addWidget(quit_button);
 layout1->setAlignment(Qt::AlignCenter);
 
 page1->setLayout(layout1);
-//setLayout(layout1);
 
-//back = new QPushButton(page2);
-
-//back->setText("Wstecz");
 QVBoxLayout *mainLayout = new QVBoxLayout();
 mainLayout->addWidget(strony);
 setLayout(mainLayout);
-
-QVBoxLayout *layout3 = new QVBoxLayout();
-//layout3->addWidget(back);
-//page2->setLayout(layout3);
-
-
 
 
 strony->addWidget(page1);
 strony->addWidget(page2);
 strony->addWidget(page3);
 strony->setCurrentWidget(0);
-//setLayout(layout3);
+
 
 
 
@@ -121,12 +110,7 @@ strony->setCurrentWidget(0);
 
 
 connect(new_account, &QPushButton::clicked, [this]() {
-   // QWidget *par = new QWidget();
-   //register_page();
-
-           strony->setCurrentIndex(1); // Wykonanie akcji setCurrentIndex(1)
-
-
+           strony->setCurrentIndex(1);
 });
 
 
@@ -167,30 +151,24 @@ void Login_Window::Login_success(bool guest)
 {
     if (guest)
     {
-    qDebug ()<< "Zalogowanio sie jako gosc";
     log = "gu";
     emit logged(1);
     this->close();
     guest=false;
-    //qApp->exit();
-    login->setText("");
-    password->setText("");
+    clear_inputs();
     }
 else
     {   
         User user;
         if(user.findUser(login->text().toStdString()))
-     {   qDebug ()<< "Poprawny login";
-            qDebug ()<< password->text();
+     {
         if(user.checkPassword(password->text().toStdString()))
         {
              log= login->text().toStdString();
              qDebug ()<< "Zalogowanio sie jako: " << QString::fromStdString(log);
              emit logged(2);
              this->close();
-              login->setText("");
-              password->setText("");
-           //qApp->exit();
+             clear_inputs();
         }
         else
         {
@@ -208,17 +186,14 @@ else
 void Login_Window::Change_Page()
 {
 
-    if ( strony->currentIndex() == 0) // jesli na menu glownym
+    if ( strony->currentIndex() == 0)
     {
-        qDebug() <<" zmiana strony ==0";
-        qDebug() << strony->currentIndex();
-        strony->setCurrentIndex(2);  //
+        strony->setCurrentIndex(2);  //idz do edycji
     }
-    else if ( strony->currentIndex() ==1 or strony->currentIndex() == 2 ) // jesli statystyki
+    else if ( strony->currentIndex() ==1 or strony->currentIndex() == 2 )
     {
-        qDebug() <<" zmiana strony ";
-        qDebug() << strony->currentIndex();
-        strony->setCurrentIndex(0);  // idz to menu glowne
+        strony->setCurrentIndex(0);
+        clear_inputs();
     }
 }
 
@@ -255,23 +230,21 @@ void Login_Window::show_warrning(int a)
 
 void Login_Window::register_page()
 {
-    qDebug() << "sas";
-//Login_Window_Reg *reg = new Login_Window_Reg(page2);
-//connect (reg,&Login_Window_Reg::go_back,this,&Login_Window::Change_Page);
-//page2->setLayout(reg->layout());
 strony ->setCurrentIndex(1);
-
 }
 
 std::string Login_Window::get_user()
 {
 if (log == "gu")
 {
-    qDebug() << "ZWARACAM GOSCIA";
  return log;
 }
-qDebug() << "ZWARACAM UZYTKOWNIKA";
- //log= login->text().toStdString();
  return log;
+}
 
+
+void Login_Window::clear_inputs()
+{
+    login->setText("");
+    password->setText("");
 }

@@ -26,25 +26,30 @@ napis->move(10,5);
 
 
 
-back_button = new QPushButton(parent);
+back_button = new my_button("Wstecz",parent);
 back_button->setFixedSize(165,50);
-
-back_button->setText("Wstecz");
+//back_button->setText("Wstecz");
 connect(back_button, &QPushButton::clicked, this, &Statistics_Window::emit_go_back);
 
 layout = new QVBoxLayout(parent);
 player_choice = new QComboBox(parent);
-player_choice->setFixedSize(165,50);
-int a =2;
-int b =2;
+player_choice->setFixedSize(150,50);
+
+QString styleSheet = "QComboBox {"
+                     "border-radius: 10px;" // Ustawienie zaokrąglonego narożnika
+                     "padding: 5px 18px 1px 3px;" // Ustawienie marginesów wewnątrz komboboxa
+                     "background-color: rgb(52,94,229);"
+                     "font-size: 18px;" // Ustawienie rozmiaru tekstu głównego na 18px
+                     "color: white;" // Ustawienie koloru tekstu
+                     "}";
 
 
-//player_choice->move( (800-player_choice->width())/2 , 150);
+player_choice->setStyleSheet(styleSheet);
+
 
 
 QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
- //spacer->changeSize(125,120);
 
 statystyki.Get_users(player_choice); // Dodanie użytkowników do listy
 if(user!="gu")
@@ -56,27 +61,18 @@ statystyki.Load(wyniki);
 
 player_choice->currentIndex();
 
-
 layout->addWidget(player_choice);
-//layout->addItem(spacer);
-//layout->addWidget(brak_statystyk);
 layout->addItem(spacer);
-//layout->addWidget(tabela);
 layout->addWidget(back_button);
 layout->setAlignment(Qt::AlignCenter);
-qDebug() <<"ROZMIAR: " <<tabela->width();
 tabela->move(230 ,150);
 
 
-
-
-//TU WSTAWIC METODE ZWRACJACA NUMER USERA
 Show_results(Get_user_num());
-//Set_best(0);
+
 
 
 QObject::connect(player_choice, QOverload<int>::of(&QComboBox::currentIndexChanged), [&](int index){
-    qDebug() << "Wybrany indeks: " << index;
     Choice();
 });
 }
@@ -90,11 +86,9 @@ if (player != -1){
     Remove_rows();
 
     QString timeString;
-    qDebug()<<"przd best";
     if (!wyniki[player].empty()){
         brak_statystyk->setText(" ");
      int best = statystyki.Get_best(player,wyniki);
-         qDebug() << "PPo best";
     QList<QStandardItem*> rowItems;
      rowItems.append(new QStandardItem( QString::number(wyniki[player][best].result)));
      rowItems.append(new QStandardItem(wyniki[player][best].time.toString("hh:mm:ss")));
@@ -123,7 +117,6 @@ model->appendRow(rowItems);
 }
     else {
 brak_statystyk->setText("Brak zapisanych statystyk");
-        qDebug() << "Nie ma best - psuty plik";
     }
 }
 else
@@ -135,9 +128,7 @@ else
 
 void Statistics_Window::Choice()
 {
-qDebug() << player_choice->currentIndex();
 Show_results(player_choice->currentIndex());
-//Set_best(player_choice->currentIndex());
 }
 
 
@@ -183,49 +174,21 @@ void Statistics_Window::Set_best(int player)
     rowItems.append(new QStandardItem(Get_level(player,best)));
     rowItems.append(new QStandardItem(wyniki[player][best].mistakes));
     rowItems.append(new QStandardItem(wyniki[player][best].hints));
-    //model->appendRow(rowItems);
     model->insertRow(0, rowItems);
-
-
-  // lista->takeItem(best+1);
-  // lista->insertItem(1,QString::number(wyniki[player][best].result)+ QString(" ").repeated(Get_length("Punkty   ",wyniki[player][best].result)) +Get_level(player,best) +QString(" ").repeated(Get_length("Poziom Trudności   ",Get_level(player,best).length())-3)+wyniki[player][best].time.toString("hh:mm:ss")+ QString(" ").repeated(Get_length("Czas Gry   ",8))+QString::number(wyniki[player][best].mistakes)+ QString(" ").repeated(Get_length("Ilość błędów   ",wyniki[player][best].mistakes))  +QString::number(wyniki[player][best].hints));
-
-
-  //USTAWIEANIE KOLORU
-  // QListWidgetItem* item = lista->item(1);
-  // item->setForeground(QColor(66, 126, 227));
     }
 }
 
  int Statistics_Window::Get_length(QString str, int i)
  {
    QString liczbaStr = QString::number(i);
-   qDebug() <<str <<"Liczba str: " << liczbaStr.length() << "Długos napisu " << str.length() << "Ile spacji " <<str.length() - liczbaStr.length()+3 ;
    return str.length() - liczbaStr.length()-1 ;
-   //return 10;
  }
 
-
-/*ZWRACANIE NUMERU GRACZA
-QString targetText = "user1";
-int currentIndex = comboBox->currentIndex();
-QString currentText = comboBox->currentText();
-if (currentText == targetText) {
-    // Aktualnie wybrany element ma tekst "user1"
-    // Indeks jest przechowywany w zmiennej 'currentIndex'
-    // Można wykonać odpowiednie operacje na elemencie
-} else {
-    // Aktualnie wybrany element nie ma tekstu "user1"
-}
-*/
 
 
  void Statistics_Window::Remove_rows()
  {
-     // model->removeRows();
      int rowCount = model->rowCount();
-      // model->clear();
-
      model->removeRows(0,rowCount);
  }
 
@@ -254,12 +217,10 @@ if (currentText == targetText) {
      msgBox.exec();
      if (msgBox.clickedButton() == yesButton)
      { //Menu główne
-         qDebug() << "Idz do menu";
         emit go_menu();
      }
      else if (msgBox.clickedButton() == noButton)
      {  //Nowa gra
-         qDebug() << "Idz do stat";
         emit go_stat();
      }
 Show_results(Get_user_num());
@@ -270,7 +231,6 @@ Show_results(Get_user_num());
  {
 
   int index = player_choice->findText(QString::fromStdString(user));
-  qDebug() << "Numer usera: " << index;
   return index;
 
  }

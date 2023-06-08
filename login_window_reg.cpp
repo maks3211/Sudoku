@@ -3,8 +3,6 @@
 Login_Window_Reg::Login_Window_Reg(QWidget *parent)
     : QWidget{parent}
 {
-//layout1 = new QVBoxLayout(parent);
-qDebug() << "Klasa rejestracji";
 
 warnings = new Warnings(parent);
 
@@ -47,13 +45,11 @@ password_p->setStyleSheet("QLineEdit {"
                         "color:black;font-size:18px; }"
                         );
 
-reg = new QPushButton(parent);
-reg ->setText("Zarejestruj się");
+reg = new my_button("Zarejestruj się",parent);
 reg->setFixedSize(165,35);
 
 
-back= new QPushButton(parent);
-back ->setText("Wstecz");
+back= new my_button("Wstecz",parent);
 back->setFixedSize(165,35);
 
 
@@ -81,6 +77,9 @@ connect(reg, &QPushButton::clicked, this, &Login_Window_Reg::add_account);
 
 void Login_Window_Reg::go_back_clicked()
 {
+    Clear(0);
+    Clear(1);
+    Clear(2);
     emit go_back();
 }
 
@@ -94,6 +93,9 @@ if (a == 0)
 {
     warnings->Added_new_user();
     warnings->Show("short");
+    Clear(0);
+    Clear(1);
+    Clear(2);
 }
 else if (a == 1)
 {

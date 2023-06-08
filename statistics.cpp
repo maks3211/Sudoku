@@ -42,10 +42,7 @@ void Statistics::Save(int result, std::string user,int user_num,std::vector<std:
     std::filesystem::path copy = docPath;
     std::ofstream plik(copy /=user+".txt", std::ios_base::app);
 
-    qDebug() << "Ścieżka do stat : " << QString::fromStdString(copy.string());
 
-
-    //Pobrac numer usera
 Result wynik;
 wynik.result = result;
 wynik.lvl = lvl;
@@ -58,8 +55,7 @@ wyniki_vec[user_num].push_back(wynik);
 if (plik.is_open())
 {
     int seconds = QTime(0, 0, 0).secsTo(time);
-   // plik <<result <<" " << lvl <<" " << time.toString("HH:mm:ss").toStdString() << " " << m << " " << h;
-    plik<<"\n"<<result <<" " << lvl <<" " << seconds << " " << m << " " << h;
+    plik<<result <<" " << lvl <<" " << seconds << " " << m << " " << h<<"\n";
 }
 plik.close();
 }
@@ -80,7 +76,6 @@ void Statistics::Load(std::vector<std::vector<Result>>&wyniki_vec)
 
 if (plik.is_open() && !(plik.peek() == std::ifstream::traits_type::eof()))
 {
-qDebug()<<"Ładowanie ";
 std::vector<Result> vec;
     while (!plik.eof())
     {
@@ -101,16 +96,12 @@ std::vector<Result> vec;
       wyniki.hints = h;
       wyniki.mistakes = m;
       wyniki.time = time;
-      qDebug() << "PRZED";
       vec.push_back(wyniki);
-       qDebug() << "Po";
-    }qDebug() << "przed pushemoopo";
+    }
      wyniki_vec.push_back(vec);
-      qDebug() << "poopo";
 }
 else if (plik.is_open() && (plik.peek() == std::ifstream::traits_type::eof()))
 {
-    qDebug() << "PUSTY";
     std::vector<Result> emptyVec; // Pusty wektor - brak danych
     wyniki_vec.push_back(emptyVec);
 }
@@ -125,7 +116,6 @@ void Statistics::Get_users(QComboBox * box)
 std::filesystem::path copy = docPath;
 for (auto const& el : std::filesystem::directory_iterator(copy))
 {
-    qDebug()<<"Szukanie userow w statistisc";
     box->addItem(QString::fromStdString(el.path().filename().string()).chopped(4));
 }
 
@@ -145,7 +135,6 @@ for (auto i = 0 ; i < wyniki_vec[player].size(); i++)
    }
 
 }
-qDebug() << "Najlepszy wynik" << best;
 }
 return best;
 
@@ -154,7 +143,6 @@ return best;
 void Statistics::Change_username(std::string new_name, std::string old_name)
 {
     std::filesystem::path copy = docPath;
-    std::cout << " PO ZMINAIE : " << copy;
     std::filesystem::path oldFilePath = docPath / (old_name + ".txt");
     std::filesystem::path newFilePath = docPath / (new_name + ".txt");
     if (std::filesystem::exists(oldFilePath)) {

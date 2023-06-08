@@ -1,6 +1,6 @@
 #include "notatki.h"
 
-//Z GRY PRZEKAZYWAC WPISANY ZNAK DO METODY W NOTATKACH- WYKORZYSTAC TAMTE POLA TEKSTOWE
+
 Notatki::Notatki(QWidget *parent)
     : QWidget{parent}
 {
@@ -8,7 +8,7 @@ Notatki::Notatki(QWidget *parent)
  {
    cyfry.append(new QLabel(this));// = new QLabel;
    cyfry[i] -> setText(QString::number(i+1));
-   cyfry[i]->setStyleSheet("color: transparent");  //TO JEST TO !!!
+   cyfry[i]->setStyleSheet("color: transparent");
  }
    set_pos(cyfry);
 
@@ -31,7 +31,6 @@ for (int i = 0 ; i<3 ;i++)
 }
 
 }
-//     c[index]->move(65+30*j,50+30*i);
 
 void Notatki::set_notes(int val)
 {
@@ -39,15 +38,12 @@ void Notatki::set_notes(int val)
 
     if (cyfry[val-1]->palette().text().color() ==Qt::transparent)
     {
-        qDebug() << "JEST WIDZIALE";
           cyfry[val-1]->setStyleSheet("color: black");
 
     }
     else
     {
-         qDebug() << "NIE JEST WIDZIALE";
-        //cyfry[val-1]->setStyleSheet("color: red");
-       cyfry[val-1]->setStyleSheet("color: transparent"); // to jest to
+       cyfry[val-1]->setStyleSheet("color: transparent");
     }
 
 }

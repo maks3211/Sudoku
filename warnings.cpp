@@ -3,14 +3,14 @@
 Warnings::Warnings(QWidget *parent)
     : QWidget{parent}
 {
-    short_message = new QLabel(parent);
+    short_message = std::make_shared<QLabel>(parent);
     short_message ->setFixedSize(180,38); //180,40
     short_message->setText("");
     short_message->setWordWrap(true);
     short_message->setAlignment(Qt::AlignCenter);
     short_message->setStyleSheet("QLabel{font-size:14px;}"  );
 
-    long_message = new QLabel(parent);
+    long_message = std::make_shared<QLabel>(parent);
     long_message->setText("");
     long_message ->setFixedSize(185,180);
     long_message->move(450,15);
@@ -29,7 +29,7 @@ void Warnings::Show(std::string which)
     if (which == "short")
     {
         short_message->show();
-        QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(short_message);
+        QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(short_message.get());
         short_message->setGraphicsEffect(e);
         QPropertyAnimation *anim = new QPropertyAnimation(e, "opacity");
         anim->setDuration(250); // czas trwania animacji w ms
@@ -45,7 +45,7 @@ void Warnings::Show(std::string which)
     }
     else if (which == "long")
     {
-        QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(long_message);
+        QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(long_message.get());
         long_message->setGraphicsEffect(e);
         QPropertyAnimation *anim = new QPropertyAnimation(e, "opacity");
         anim->setDuration(250); // czas trwania animacji w ms
@@ -138,5 +138,5 @@ void Warnings::Login_req()
 
 QLabel* Warnings::get_short_message()
 {
-    return short_message;
+    return short_message.get();
 }

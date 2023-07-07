@@ -55,7 +55,7 @@ connect(this, &QPushButton::pressed, this, &my_button::make_bigger);
                    isAnimationRunning = false;
                    make_smaller();
                });
-               animation->start();
+               animation->start(QPropertyAnimation::DeleteWhenStopped);
            }
    }
 
@@ -74,13 +74,12 @@ connect(this, &QPushButton::pressed, this, &my_button::make_bigger);
                connect(animation, &QPropertyAnimation::finished, this, [this]() {
                    isAnimationRunning = false;
                });
-               animation->start();
+               animation->start(QPropertyAnimation::DeleteWhenStopped);
            }
    }
 
    void my_button::setDisabled(bool disabled)
-   {
-       qDebug() << "TO idzie ";
+   {  
       if (disabled)
       { this ->QPushButton::setDisabled(disabled);
        this->setStyleSheet("QPushButton {"

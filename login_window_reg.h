@@ -14,16 +14,17 @@
 #include"user.h"
 #include"warnings.h"
 #include"my_button.h"
+#include<memory>
 class Login_Window_Reg : public QWidget
 {
     Q_OBJECT
 private:
-    QLabel *text;
-    QLineEdit *login;
-    QLineEdit *password;
-    QLineEdit *password_p;
-    my_button *reg;
-    my_button *back;
+    std::shared_ptr<QLabel>text;
+     std::shared_ptr<QLineEdit>login;
+     std::shared_ptr<QLineEdit>password;
+     std::shared_ptr<QLineEdit>password_p;
+    std::shared_ptr<my_button>reg;
+    std::shared_ptr<my_button>back;
     User u;
     QWidget *page1= new QWidget();
     Warnings *warnings;

@@ -7,10 +7,10 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
     warnings = new Warnings(parent);
 
 
-    text = new QLabel (parent);
+    text =std::make_shared<QLabel>(parent);
     text->setText("<center><font color='#0e0b78', size = 9><b>Sudoku</b></font><br><font color= '#092D8C', size = 4>Edytuj konto</font><center>");
 
-    login = new QLineEdit(parent);
+    login = std::make_shared<QLineEdit>(parent);
     login->setPlaceholderText("Login");
     login->setFixedSize(165,35);
     login->setStyleSheet("QLineEdit {"
@@ -19,7 +19,7 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
                             "color:black;font-size:18px; }"
                             );
 
-    password = new QLineEdit(parent);
+    password = std::make_shared<QLineEdit>(parent);
     password->setPlaceholderText("Hasło");
     password->setEchoMode(QLineEdit::Password);
     password->setFixedSize(165,35);
@@ -29,7 +29,7 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
                             "color:black;font-size:18px; }"
                             );
 
-    new_thing = new QLineEdit(parent);
+    new_thing = std::make_shared<QLineEdit>(parent);
     new_thing->setPlaceholderText("Nowy login");
     new_thing->setFixedSize(165,35);
     new_thing->setStyleSheet("QLineEdit {"
@@ -38,7 +38,7 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
                     "color:black;font-size:18px; }"
                     );
 
-    new_thing_p = new QLineEdit(parent);
+    new_thing_p = std::make_shared<QLineEdit>(parent);
     new_thing_p->setPlaceholderText("Powtórz login");
     new_thing_p->setFixedSize(165,35);
     new_thing_p->setStyleSheet("QLineEdit {"
@@ -48,21 +48,21 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
                             );
 
 
-    edit= new my_button("Zmień",parent);
+    edit=  std::make_shared<my_button>("Zmień",parent);
     edit->setFixedSize(165,35);
 
 
-    remove= new my_button("Usuń konto",parent);
+    remove=  std::make_shared<my_button>("Usuń konto",parent);
     remove ->setText("Usuń konto");
     remove->setGeometry(10,10,140,35);
     remove->setColor(217,83,79,205,48,44);
 
-    choice_box = new my_checkbox(parent);
+    choice_box =std::make_shared<my_checkbox>(parent);
     choice_box->setLeftText("Login");
     choice_box->setRightText("Hasło");
     choice_box ->setFixedSize(165,35);
 
-    back= new my_button("Wstecz",parent);
+    back=  std::make_shared<my_button>("Wstecz",parent);
     back ->setText("Wstecz");
     back->setFixedSize(165,35);
 
@@ -74,26 +74,26 @@ Login_Window_Edit::Login_Window_Edit(QWidget *parent)
     QVBoxLayout *layout1 = new QVBoxLayout(parent);
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    layout1->addWidget(text);
-    layout1->addWidget(login);
-    layout1->addWidget(password);
+    layout1->addWidget(text.get());
+    layout1->addWidget(login.get());
+    layout1->addWidget(password.get());
     layout1->addWidget(warnings->get_short_message());
-    layout1->addWidget(new_thing);
-    layout1->addWidget(new_thing_p);
-    layout1->addWidget(edit);
-    layout1->addWidget(choice_box);
-    layout1->addWidget(back);
+    layout1->addWidget(new_thing.get());
+    layout1->addWidget(new_thing_p.get());
+    layout1->addWidget(edit.get());
+    layout1->addWidget(choice_box.get());
+    layout1->addWidget(back.get());
     layout1->addItem(spacer);
     layout1->setAlignment(Qt::AlignCenter);
     this->setLayout(layout1);
 
-    connect(back, &QPushButton::clicked, this, &Login_Window_Edit::go_back_clicked);
+    connect(back.get(), &QPushButton::clicked, this, &Login_Window_Edit::go_back_clicked);
 
-    connect(choice_box,&QCheckBox::stateChanged,this,&Login_Window_Edit::What_edit);
+    connect(choice_box.get(),&QCheckBox::stateChanged,this,&Login_Window_Edit::What_edit);
 
-    connect(remove,&QPushButton::clicked,this,&Login_Window_Edit::Delete_user);
+    connect(remove.get(),&QPushButton::clicked,this,&Login_Window_Edit::Delete_user);
 
-    connect(edit, &QPushButton::clicked,[this](){
+    connect(edit.get(), &QPushButton::clicked,[this](){
         if (!choice_box->isChecked())
         {
         Edit_login();
@@ -206,7 +206,7 @@ else if (a == 5)
 {
     warnings->No_user();
     warnings->Show("short");
-    qDebug ()<< "nie ma takiego użtkownika- z remove user";
+    qDebug ()<< "nie ma takiego użtkownika";
 
 }
 else if (a == 6)

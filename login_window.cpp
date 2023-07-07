@@ -12,10 +12,10 @@ Login_Window::Login_Window(QWidget *parent)
 layout1 = new QVBoxLayout(page1);
 
 
-text = new QLabel (page1);
+text = std::make_shared<QLabel> (page1);
 text->setText("<center><font color='#0e0b78', size = 9><b>Sudoku</b></font><br><font color= '#092D8C', size = 4>Zaloguj się, aby kontynuować</font><center>");
 
-warrning = new QLabel(page1);
+warrning = std::make_shared<QLabel>(page1);
 warrning ->setFixedSize(175,25);
 warrning->setText("");
 warrning->setAlignment(Qt::AlignCenter);
@@ -24,7 +24,7 @@ warrning->setStyleSheet("QLabel{font-size:14px;}"  );
 
 
 
-    login = new QLineEdit(this);
+    login = std::make_shared<QLineEdit> (this);
     login->setPlaceholderText("Login");
     login->setFixedSize(165,35);
     login->setStyleSheet("QLineEdit {"
@@ -35,7 +35,7 @@ warrning->setStyleSheet("QLabel{font-size:14px;}"  );
 
 
 
-    password = new QLineEdit(page1);
+    password = std::make_shared<QLineEdit>(page1);
     password->setPlaceholderText("Hasło");
     password->setEchoMode(QLineEdit::Password);
     password->setFixedSize(165,35);
@@ -47,22 +47,22 @@ warrning->setStyleSheet("QLabel{font-size:14px;}"  );
 
 
 
-login_button = new my_button("Zaloguj się",page1);
+login_button = std::make_shared<my_button>("Zaloguj się",page1);
 
 login_button->setFixedSize(165,35);
 
 
 
 
-guest_button = new my_button("Graj jako Gość",page1);
+guest_button = std::make_shared<my_button>("Graj jako Gość",page1);
 
 guest_button->setFixedSize(165,35);
 
-new_account=new my_button("Zarejestruj się",page1);
+new_account=std::make_shared<my_button>("Zarejestruj się",page1);
 
 new_account->setFixedSize(165,35);
 
-edit = new my_button("Edytuj konto",page1);
+edit = std::make_shared<my_button>("Edytuj konto",page1);
 
 
 edit->setFixedSize(165,35);
@@ -74,21 +74,21 @@ edit->setFixedSize(165,35);
 
 
 
-quit_button = new my_button("Wyjdź",page1);
+quit_button = std::make_shared<my_button>("Wyjdź",page1);
 quit_button->setFixedSize(165,35);
 
 
 QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-layout1->addWidget(text);
-layout1->addWidget(login);
-layout1->addWidget(password);
-layout1->addWidget(warrning);
-layout1->addWidget(login_button);
-layout1->addWidget(guest_button);
-layout1->addWidget(new_account);
-layout1->addWidget(edit);
+layout1->addWidget(text.get());
+layout1->addWidget(login.get());
+layout1->addWidget(password.get());
+layout1->addWidget(warrning.get());
+layout1->addWidget(login_button.get());
+layout1->addWidget(guest_button.get());
+layout1->addWidget(new_account.get());
+layout1->addWidget(edit.get());
 layout1->addItem(spacer);
-layout1->addWidget(quit_button);
+layout1->addWidget(quit_button.get());
 layout1->setAlignment(Qt::AlignCenter);
 
 page1->setLayout(layout1);
@@ -109,23 +109,23 @@ strony->setCurrentWidget(0);
 
 
 
-connect(new_account, &QPushButton::clicked, [this]() {
+connect(new_account.get(), &QPushButton::clicked, [this]() {
            strony->setCurrentIndex(1);
 });
 
 
-connect(login_button, &QPushButton::clicked, [this]() {
+connect(login_button.get(), &QPushButton::clicked, [this]() {
     Login_success(0);
 });
 
-connect(guest_button, &QPushButton::clicked, [this]() {
+connect(guest_button.get(), &QPushButton::clicked, [this]() {
     Login_success(1);
 
 });
 
 
 
-connect(quit_button, SIGNAL(clicked()), this, SLOT(close()));
+connect(quit_button.get(), SIGNAL(clicked()), this, SLOT(close()));
 
 //Okno rejestracji
 Login_Window_Reg *reg = new Login_Window_Reg(page2);
@@ -134,13 +134,13 @@ page2->setLayout(reg->layout());
 login->setFocus();
 
 //logowanie za pomocą entera
-connect(login, &QLineEdit::returnPressed, login_button, &QPushButton::click);
-connect(password, &QLineEdit::returnPressed, login_button, &QPushButton::click);
+connect(login.get(), &QLineEdit::returnPressed, login_button.get(), &QPushButton::click);
+connect(password.get(), &QLineEdit::returnPressed, login_button.get(), &QPushButton::click);
 
 
 Login_Window_Edit *edit_w = new Login_Window_Edit(page3);
 page3->setLayout(edit_w->layout());
-connect(edit, SIGNAL(clicked()), this,  SLOT(Change_Page()));
+connect(edit.get(), SIGNAL(clicked()), this,  SLOT(Change_Page()));
 
 connect(edit_w,&Login_Window_Edit::go_back,this,&Login_Window::Change_Page);
 
@@ -210,7 +210,7 @@ void Login_Window::show_warrning(int a)
     }
     warrning->show();
 
-    QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(warrning);
+    QGraphicsOpacityEffect *e = new QGraphicsOpacityEffect(warrning.get());
     warrning->setGraphicsEffect(e);
     QPropertyAnimation *anim = new QPropertyAnimation(e, "opacity");
     anim->setDuration(250); // czas trwania animacji w ms

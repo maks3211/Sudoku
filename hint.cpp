@@ -4,7 +4,7 @@
         : QWidget{parent}
     {
         count =0;
-        button = new my_button("",this);
+        button = std::make_shared<my_button>("",this);
         button ->setText("Podpowiedzi: 0/3");
         //button->setFixedSize(130,45);
         button->setStyleSheet("QPushButton {"
@@ -13,7 +13,7 @@
                                     "color:white;font-size:14px; }"
                                     "QPushButton:hover:!pressed{background-color:rgb(28,72,225)}");
         button->setGeometry(670,220,110,45);
-    connect(button, &QPushButton::clicked, this, &Hint::changetext);
+    connect(button.get(), &QPushButton::clicked, this, &Hint::changetext);
     }
 
     void Hint::changetext()

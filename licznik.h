@@ -8,7 +8,7 @@
 #include<QVBoxLayout>
 #include<QPushButton>
 #include<QPropertyAnimation>
-
+#include<memory>
 //dwa ponizesze do rozmycia tla
 #include<QGraphicsEffect>
 #include<QGraphicsBlurEffect>
@@ -34,10 +34,10 @@ private:
    QTime czas_rozpoczecia;
    int czas_gry_int;
 bool win;
-   QLabel *label_czas_gry;
-   QPushButton *icon;
-   QPropertyAnimation *small;
-   QPropertyAnimation *big;
+   std::shared_ptr<QLabel>label_czas_gry;
+    std::shared_ptr<QPushButton>icon;
+   std::shared_ptr<QPropertyAnimation>small;
+   std::shared_ptr<QPropertyAnimation>big;
    QPropertyAnimation *change_icon;
 public slots:
    void stopButtonClicked();

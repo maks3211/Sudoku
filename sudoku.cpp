@@ -10,7 +10,7 @@ Sudoku::Sudoku(std::vector<std::vector<int>>& removed_board,std::vector<std::vec
 
 
 
-bool Sudoku::isValid(int row, int col, int wartosc,std::vector<std::vector <int>> & board )
+bool Sudoku::isValid(int row, int col, int wartosc,std::vector<std::vector <int>> & board ) //Czy wartosc jest poprawna
 {
     for (int c = 0; c < 9; c++) // sprawdzanie wierszy
     {

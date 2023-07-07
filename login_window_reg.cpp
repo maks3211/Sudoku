@@ -7,13 +7,13 @@ Login_Window_Reg::Login_Window_Reg(QWidget *parent)
 warnings = new Warnings(parent);
 
 
-text = new QLabel (parent);
+text = std::make_shared<QLabel> (parent);
 text->setText("<center><font color='#0e0b78', size = 9><b>Sudoku</b></font><br><font color= '#092D8C', size = 4>Zarejsetruj się</font><center>");
 
 
 
 
-login = new QLineEdit(parent);
+login = std::make_shared<QLineEdit>(parent);
 login->setPlaceholderText("Login");
 login->setFixedSize(165,35);
 login->setStyleSheet("QLineEdit {"
@@ -23,7 +23,7 @@ login->setStyleSheet("QLineEdit {"
                         );
 
 
-password = new QLineEdit(parent);
+password = std::make_shared<QLineEdit>(parent);
 password->setPlaceholderText("Hasło");
 password->setEchoMode(QLineEdit::Password);
 password->setFixedSize(165,35);
@@ -35,7 +35,7 @@ password->setStyleSheet("QLineEdit {"
 
 
 
-password_p = new QLineEdit(parent);
+password_p = std::make_shared<QLineEdit>(parent);
 password_p->setPlaceholderText("Powtórz hasło");
 password_p->setEchoMode(QLineEdit::Password);
 password_p->setFixedSize(165,35);
@@ -45,11 +45,11 @@ password_p->setStyleSheet("QLineEdit {"
                         "color:black;font-size:18px; }"
                         );
 
-reg = new my_button("Zarejestruj się",parent);
+reg = std::make_shared<my_button>("Zarejestruj się",parent);
 reg->setFixedSize(165,35);
 
 
-back= new my_button("Wstecz",parent);
+back= std::make_shared<my_button>("Wstecz",parent);
 back->setFixedSize(165,35);
 
 
@@ -58,19 +58,19 @@ QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::E
 
 
 
-layout1->addWidget(text);
-layout1->addWidget(login);
-layout1->addWidget(password);
-layout1->addWidget(password_p);
+layout1->addWidget(text.get());
+layout1->addWidget(login.get());
+layout1->addWidget(password.get());
+layout1->addWidget(password_p.get());
 layout1->addWidget(warnings->get_short_message());
-layout1->addWidget(reg);
-layout1->addWidget(back);
+layout1->addWidget(reg.get());
+layout1->addWidget(back.get());
 layout1->addItem(spacer);
 layout1->setAlignment(Qt::AlignCenter);
 this->setLayout(layout1);
 
-connect(back, &QPushButton::clicked, this, &Login_Window_Reg::go_back_clicked);
-connect(reg, &QPushButton::clicked, this, &Login_Window_Reg::add_account);
+connect(back.get(), &QPushButton::clicked, this, &Login_Window_Reg::go_back_clicked);
+connect(reg.get(), &QPushButton::clicked, this, &Login_Window_Reg::add_account);
 
 }
 

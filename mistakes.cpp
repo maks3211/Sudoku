@@ -3,7 +3,7 @@
 Mistakes::Mistakes(QWidget *parent)
     : QWidget{parent}
 {
-mistakes = new QLabel(this);
+mistakes =  std::make_shared<QLabel>(this);
 mistakes->setText("Błędy: 0/3");
 connect(this, SIGNAL(too_many()), this, SLOT(Loss()));
 

@@ -46,7 +46,7 @@ Main_Window::Main_Window(std::string user,QWidget *parent)
 
 
 
-uzytkownik = new QLabel(widget1);
+uzytkownik = std::make_shared<QLabel>(widget1);
 if (user == "gu")
 {
 uzytkownik->setText("Grasz jako Gość");
@@ -56,18 +56,18 @@ else
    uzytkownik->setText("Witaj, " + QString::fromStdString(user));
 }
 
-    nowa_gra_button = new my_button("Nowa gra", widget1);
-    wznow_button = new my_button("Wznów", widget1);
-    stat_button = new my_button("Statystyki", widget1);
-    instrukcja_button = new my_button("Opis Gry", widget1);
-    wyjdz_button = new my_button("Wyjdź", widget1);
-    wyloguj = new my_button("Wyloguj się", widget1);
-    wstecz = new my_button("Wstecz", widget1);
+    nowa_gra_button = std::make_shared<my_button>("Nowa gra", widget1);
+    wznow_button = std::make_shared<my_button>("Wznów", widget1);
+    stat_button = std::make_shared<my_button>("Statystyki", widget1);
+    instrukcja_button = std::make_shared<my_button>("Opis Gry", widget1);
+    wyjdz_button = std::make_shared<my_button>("Wyjdź", widget1);
+    wyloguj = std::make_shared<my_button>("Wyloguj się", widget1);
+    wstecz = std::make_shared<my_button>("Wstecz", widget1);
 
-    zapisz_button = new my_button("Zapisz", widget1);
+    zapisz_button = std::make_shared<my_button>("Zapisz", widget1);
     zapisz_button->hide();
 
-    zapis_label = new QLabel("Zapisano",widget1);
+    zapis_label = std::make_shared<QLabel>("Zapisano",widget1);
     zapis_label->hide();
 
     int width = 125;
@@ -89,20 +89,21 @@ zapis_label->move((800-(width))/2 + 365,280);
     wstecz->hide();
 
 
- connect(wyloguj, &QPushButton::clicked, this,&Main_Window::onLogoutButtonClicked);
+ connect(wyloguj.get(), &QPushButton::clicked, this,&Main_Window::onLogoutButtonClicked);
 
 
 
     licznik = new Licznik(widget1);
+    licznik->move(680,25);
     licznik->hide();
 
 
-    connect(wznow_button, SIGNAL(clicked()) , this , SLOT(Wznow()));
+    connect(wznow_button.get(), SIGNAL(clicked()) , this , SLOT(Wznow()));
         wznow_button->hide();
 
 
 
-    plansza = new QLabel (widget1); //251
+    plansza = std::make_shared<QLabel> (widget1); //251
     QPixmap zdjecie(":/Tex/Tex/Sudoku.png");
     QPixmap zdjeciemale =zdjecie.scaled(QSize(252, 252), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
@@ -114,7 +115,7 @@ zapis_label->move((800-(width))/2 + 365,280);
 
 
 
-    connect(wyjdz_button, &QPushButton::clicked, this, &Main_Window::Koniec);
+    connect(wyjdz_button.get(), &QPushButton::clicked, this, &Main_Window::Koniec);
 
 
 
@@ -122,13 +123,13 @@ zapis_label->move((800-(width))/2 + 365,280);
 
 
 
-nowa = new QPropertyAnimation(plansza, "size");
+nowa = new QPropertyAnimation(plansza.get(), "size");
 nowa->setDuration(350);
 plansza->setScaledContents(true); // Ustawia, aby zdjęcie było wyskalowane i całe widoczne
 plansza->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 
-QPropertyAnimation *animation2 = new QPropertyAnimation(nowa_gra_button, "pos");
+QPropertyAnimation *animation2 = new QPropertyAnimation(nowa_gra_button.get(), "pos");
 int endValue = nowa_gra_button->pos().x()+ 325;
 animation2->setDuration(250);
 animation2->setEndValue(QPoint(endValue, nowa_gra_button->pos().y()));
@@ -149,10 +150,10 @@ group->addAnimation(animation2);
     QLabel *napis3 = new QLabel(widget2);
     napis3->setText("<center><font color='#0e0b78', size = 9><b>Zasady gry</b></font></center><br><font color= '#092D8C', size = 5>W celu wygrania gry należy uzupełnić całą planszę Sudoku. "
                     "<br>Dostępne są trzy poziomy trudności- wpływają one na liczbę uzupełnionych już pól."
-                    "<br>Najlepszy wynik danego gracza umieszczony jest na pierwszej pozycji w tabeli"
+                    "<br>Najlepszy wynik danego gracza umieszczony jest na pierwszej pozycji w tabeli."
                     "<br>Popełnienie trzech błędów skutkuje przerwaniem gry."
                     "<br>Do dyspozycji graczą są:"
-                    "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Trzy podpowiedzi- uzupełniają one jedno losowe pole, które nie jest poprawnie rozwiązane."
+                    "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Trzy podpowiedzi- uzupełniają one jedno losowe pole, które nie jest poprawnie rozwiązane"
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Opcja notatek- wpisywane wartości nie są brane pod uwagę- w dane pole można wpisać kilka wartości"
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Pauza- gracz w dowolnej chwili może zatrzymać rozgrywkę"
                     "<br><center><font size = 7><b>Punktacja</b></font></center>"
@@ -164,7 +165,7 @@ group->addAnimation(animation2);
                     "<br>&nbsp;&nbsp;&nbsp;&nbsp;-Podpowiedzi - za każdą podpowiedź gracz traci 500 punktów"
                     "</font>");
 
-    wstecz_instrukcja = new my_button("Wstecz",widget2);
+    wstecz_instrukcja = std::make_shared<my_button>("Wstecz",widget2);
     wstecz_instrukcja->setGeometry(420,650,125,42);
     QVBoxLayout *layout2 = new QVBoxLayout();
 
@@ -196,12 +197,12 @@ layout2->setAlignment(Qt::AlignCenter);
     poziomik->move(nowa_gra_button->pos().x(),nowa_gra_button->pos().y()+35);
     poziomik->raise();
 
-    connect(wstecz, SIGNAL(clicked()) , this , SLOT(Go_menu()));
-    connect(wstecz_instrukcja, SIGNAL(clicked()) , this , SLOT(Show_instruction()));
-    connect(instrukcja_button, SIGNAL(clicked()) , this , SLOT(Show_instruction()));
-    connect(stat_button, SIGNAL(clicked()) , this , SLOT(Statystyki()));
-    connect(nowa_gra_button, &QPushButton::clicked,poziomik, &Dif_level::show_window);
-    connect(nowa_gra_button, &QPushButton::clicked, stat_button, [=](){
+    connect(wstecz.get(), SIGNAL(clicked()) , this , SLOT(Go_menu()));
+    connect(wstecz_instrukcja.get(), SIGNAL(clicked()) , this , SLOT(Show_instruction()));
+    connect(instrukcja_button.get(), SIGNAL(clicked()) , this , SLOT(Show_instruction()));
+    connect(stat_button.get(), SIGNAL(clicked()) , this , SLOT(Statystyki()));
+    connect(nowa_gra_button.get(), &QPushButton::clicked,poziomik, &Dif_level::show_window);
+    connect(nowa_gra_button.get(), &QPushButton::clicked, stat_button.get(), [=](){
         if (stat_button->isHidden())
         {
             stat_button->show();
@@ -233,12 +234,11 @@ layout2->setAlignment(Qt::AlignCenter);
         stan=2;
         continuie=true;});
 
-    connect(wznow_button, &QPushButton::clicked , gra,[=](){
+    connect(wznow_button.get(), &QPushButton::clicked , gra,[=](){
         if(continuie)
         {
             QTime czas = licznik->getTime();
             gra->Load(czas,level);
-            qDebug() << "Wczytany poziom trudności: " << level;
             licznik->setTime(czas);
             continuie= false;
             connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
@@ -252,14 +252,14 @@ connect(gra,&Gra::new_signal,poziomik, &Dif_level::show_window);
 connect(gra,&Gra::reset_time,licznik, &Licznik::reset);
 connect(gra,&Gra::new_signal,licznik, [=](){ licznik->setEnabled(false); licznik->stop(); });
 connect(poziomik, &Dif_level::chosen, licznik, [=](){ licznik->setEnabled(true);licznik->reset();licznik->start(); });
-connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
+connect(zapisz_button.get(), &QPushButton::clicked, gra, [=]() {
     gra->Save(licznik->getTime(),level);
-Label_anim(zapis_label);
+Label_anim(zapis_label.get());
 });
 
 connect(gra, &Gra::full_filled,this,&Main_Window::Game_win);
-connect(statystyki_okno, &Statistics_Window::go_stat, stat_button, &QPushButton::click); //Przejscie do statystyk z okienka po wyhranej
-connect(statystyki_okno, &Statistics_Window::go_menu, wstecz, &QPushButton::click);//Przejscie do menu glownego po wygranej
+connect(statystyki_okno, &Statistics_Window::go_stat, stat_button.get(), &QPushButton::click); //Przejscie do statystyk z okienka po wyhranej
+connect(statystyki_okno, &Statistics_Window::go_menu, wstecz.get(), &QPushButton::click);//Przejscie do menu glownego po wygranej
 
 nowa_gra_button->raise();
 
@@ -325,7 +325,6 @@ void Main_Window::Start_gry() // zwieksza rozmiar planszy+ pokazuje liczby
 wstecz->show();
 uzytkownik->hide();
     if (stan == 0 ){//rozpoczynamy od małej planszy - nowa gra
-        qDebug() <<"Nowa gra ";
               make_Bigger(true);
               stan =1;
               gra->Start_game(level);
@@ -334,9 +333,9 @@ uzytkownik->hide();
               licznik->show();
               licznik->start();
               connect(licznik, &Licznik::stopClicked, gra, &Gra::Pause);
-              connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
+              connect(zapisz_button.get(), &QPushButton::clicked, gra, [=]() {
                   gra->Save(licznik->getTime(),level);
-                  Label_anim(zapis_label);
+                  Label_anim(zapis_label.get());
               });
 
         wstecz->show();
@@ -358,9 +357,9 @@ uzytkownik->hide();
        licznik->reset();
 connect(gra,&Gra::reset_time,licznik, &Licznik::reset);
 connect(gra,&Gra::new_signal,poziomik, &Dif_level::show_window);
-connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
+connect(zapisz_button.get(), &QPushButton::clicked, gra, [=]() {
     gra->Save(licznik->getTime(),level);
-    Label_anim(zapis_label);
+    Label_anim(zapis_label.get());
 });
 
 
@@ -379,9 +378,9 @@ if (user != "gu")
         gra = new Gra(widget1,user);
 
         connect(gra,&Gra::new_signal,licznik, [=](){ licznik->setEnabled(false); licznik->stop(); });       
-        connect(zapisz_button, &QPushButton::clicked, gra, [=]() {
+        connect(zapisz_button.get(), &QPushButton::clicked, gra, [=]() {
             gra->Save(licznik->getTime(),level);
-             Label_anim(zapis_label);
+             Label_anim(zapis_label.get());
         });
 
         gra->Start_game(level);     
@@ -452,7 +451,7 @@ uzytkownik->show();
     gra->hide();
     licznik->stop();
     licznik->hide();
-    QPropertyAnimation *animation3 = new QPropertyAnimation(nowa_gra_button, "pos");
+    QPropertyAnimation *animation3 = new QPropertyAnimation(nowa_gra_button.get(), "pos");
     int endValue = nowa_gra_button->pos().x()- 325;
     animation3->setDuration(250);
     animation3->setEndValue(QPoint(endValue, nowa_gra_button->pos().y()));
@@ -469,17 +468,23 @@ uzytkownik->show();
 
 void Main_Window::Wznow()
 {
+    qDebug() << "Wznow";
     if (user !="gu")
     {
         zapisz_button->show();
-        zapisz_button->raise();
+       // licznik->raise(); // to dodałem
+       // gra->raise();
+       // nowa_gra_button->raise();
+       zapisz_button->raise();
     }
 
     uzytkownik->hide();
     if (stan == 2)
     {
+        qDebug() << "STAN == 2";
+
                 make_Bigger(true);
-                QPropertyAnimation *animation3 = new QPropertyAnimation(nowa_gra_button, "pos");
+                QPropertyAnimation *animation3 = new QPropertyAnimation(nowa_gra_button.get(), "pos");
                 int endValue = nowa_gra_button->pos().x()+ 325;
                 animation3->setDuration(250);
                 animation3->setEndValue(QPoint(endValue, nowa_gra_button->pos().y()));
@@ -487,24 +492,27 @@ void Main_Window::Wznow()
                 animation3->start();
                 QObject::connect(animation3, &QPropertyAnimation::finished, [=]() {
                 gra->show();
-               gra->setEnabled(true);
+                gra->setEnabled(true);
+                });
 
 
- });
+             //  gra->raise();
+             //  licznik->raise();
+             //  nowa_gra_button->raise();
+             //  zapisz_button->raise();
+
+               stat_button->hide();
+               poziomik->hide();
+               instrukcja_button->hide();
+               wyloguj->hide();
+               stan =1;
+               wstecz->show();
                licznik->show();
                licznik->start();
+               licznik->raise();
+qDebug() << "gra: " << gra->geometry();
+qDebug() << "licznik: " << licznik->geometry();
 
-               wstecz->show();
-stat_button->hide();
-  poziomik->hide();
-instrukcja_button->hide();
-wyloguj->hide();
-               stan =1;
-               if (user !="gu")
-                              {
-                                  zapisz_button->show();
-                                  zapisz_button->raise();
-                              }
     }
 }
 

@@ -77,20 +77,21 @@ void Statistics::Load(std::vector<std::vector<Result>>&wyniki_vec)
 if (plik.is_open() && !(plik.peek() == std::ifstream::traits_type::eof()))
 {
 std::vector<Result> vec;
-    while (!plik.eof())
+int t;
+    while (plik >> result >> lvl >> t >> m >> h)  // !plik.eof()
     {
         Result wyniki;
 
-      int t;
-      plik >> result;
-      plik >> lvl;
-      plik >> t; // odczytany czas w sekundach
+      //int t;
+      //plik >> result;
+      //plik >> lvl;
+      //plik >> t; // odczytany czas w sekundach
       int godziny = t/ 3600;
       int minuty = (t % 3600) / 60;
       int sekundy = (t % 3600) % 60;
       time.setHMS(godziny, minuty, sekundy);
-      plik >> m;
-      plik >> h;
+      //plik >> m;
+      //plik >> h;
       wyniki.result = result;
       wyniki.lvl = lvl;
       wyniki.hints = h;
@@ -108,6 +109,7 @@ else if (plik.is_open() && (plik.peek() == std::ifstream::traits_type::eof()))
 plik.close();
 
     }
+
 }
 
 

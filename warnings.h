@@ -6,7 +6,7 @@
 #include<QTimer>
 #include<QPropertyAnimation>
 #include<QGraphicsOpacityEffect>
-
+#include<memory>
 class Warnings : public QWidget
 {
     Q_OBJECT
@@ -34,8 +34,8 @@ public:
 
 
 private:
-    QLabel *short_message;
-    QLabel *long_message;
+   std::shared_ptr<QLabel>short_message;
+   std::shared_ptr<QLabel>long_message;
 
 
 

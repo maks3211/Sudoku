@@ -4,7 +4,7 @@
 
 Statistics_Window::Statistics_Window(std::string user,QWidget *parent)    : QWidget{parent}, user(user)
 {
-qDebug() << "KOnsturkot" << QString::fromStdString(user) ;
+
 std::vector<Result> Wyniki_vec;
 
 tabela = new QTableView(parent);
@@ -14,22 +14,22 @@ model->setHorizontalHeaderLabels({ "Wynik", "Czas gry", "Poziom trudności", "Il
 tabela->setModel(model);
 tabela->setFixedSize(520,350);
 
-brak_statystyk= new QLabel (parent);
+brak_statystyk= std::make_shared<QLabel> (parent);
 brak_statystyk->setText(" ");
 brak_statystyk->setFixedSize(165,50);
 brak_statystyk->move(590,5);
 
-napis= new QLabel (parent);
+napis= std::make_shared<QLabel> (parent);
 napis->setText("<font color='#0e0b78', size = 9><b>Statystyki</b></font><br>");
 napis->setFixedSize(165,50);
 napis->move(10,5);
 
 
 
-back_button = new my_button("Wstecz",parent);
+back_button = std::make_shared<my_button>("Wstecz",parent);
 back_button->setFixedSize(165,50);
 //back_button->setText("Wstecz");
-connect(back_button, &QPushButton::clicked, this, &Statistics_Window::emit_go_back);
+connect(back_button.get(), &QPushButton::clicked, this, &Statistics_Window::emit_go_back);
 
 layout = new QVBoxLayout(parent);
 player_choice = new QComboBox(parent);
@@ -63,7 +63,7 @@ player_choice->currentIndex();
 
 layout->addWidget(player_choice);
 layout->addItem(spacer);
-layout->addWidget(back_button);
+layout->addWidget(back_button.get());
 layout->setAlignment(Qt::AlignCenter);
 tabela->move(230 ,150);
 
@@ -100,6 +100,7 @@ if (player != -1){
 
 for (auto i = 0 ; i < wyniki[player].size() ; i++)
 {
+
     if (i != best)
  {   timeString =  wyniki[player][i].time.toString("hh:mm:ss");
 
@@ -109,8 +110,6 @@ rowItems.append(new QStandardItem(timeString));
 rowItems.append(new QStandardItem(Get_level(player,i)));
 rowItems.append(new QStandardItem(QString::number(wyniki[player][i].mistakes)));
 rowItems.append(new QStandardItem(QString::number(wyniki[player][i].hints)));
-
-
 model->appendRow(rowItems);
     }
     }

@@ -63,7 +63,7 @@ this->hide();
 
 //}
 
-
+//Sprawdenie czy wartosc jest poprawna
 void Gra::Check(int row, int col,std::vector<std::vector<int>>full_board,bool file)
 
 {
@@ -92,6 +92,7 @@ void Gra::Start_game(int level) //Pokazuje gra- animacja jest do cyferek
     this->show();
 }
 
+//Podswietlenie odpowiednich pol podczas wyboru
 void Gra::Highlight(int row,int col,std::vector<std::vector<int>>removed_board) //removed_board[row][col].wartosc != 0
 {
 
@@ -119,6 +120,7 @@ void Gra::Highlight(int row,int col,std::vector<std::vector<int>>removed_board) 
     }
  m_textFields[row][col]->setStyleSheet("background-color: #c6ddf9;border: 0px solid red" ); //"background-color: #c6ddf9 "+
 }
+//Wylaczenie podswietlenia
 void Gra::Offlight(int row,int col,std::vector<std::vector<int>>removed_board)
 {
     for (int c = 0; c < 9; c++) // sprawdzanie wierszy
@@ -313,10 +315,8 @@ void Gra::Reset()
       {
       if (removed_board[i][j] == 0 )
        {
-          qDebug()<<i<<" " <<j;
       notatki[i][j]->clear_notes();
       m_button[i][j]->setText(" ");
-      qDebug() <<"-"<<  m_button[i][j]->text() << "-";
       }
 
      }
@@ -344,8 +344,7 @@ void Gra::Change_filled(bool add)
 
      if (filled == 0 )
      {
-         emit full_filled();
-         qDebug() << "pelna";
+         emit full_filled(); //poprawnie wypelniona pelna plansza
      }
  }
  else if (!add)

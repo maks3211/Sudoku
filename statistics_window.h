@@ -14,6 +14,7 @@
 #include"Result_struct.h"
 #include"statistics.h"
 #include"my_button.h"
+#include<memory>
 class Statistics_Window : public QWidget
 {
     Q_OBJECT
@@ -24,12 +25,12 @@ public:
 private:
     QVBoxLayout *layout;
     QTableView *tabela;
-    QLabel *brak_statystyk;
-    QLabel *napis;
+    std::shared_ptr<QLabel>brak_statystyk;
+    std::shared_ptr<QLabel>napis;
     QStandardItemModel* model;
     QComboBox *player_choice;
     Statistics statystyki;
-    my_button *back_button;
+    std::shared_ptr<my_button>back_button;
     void Choice();
     void Set_best(int player);
     void Remove_rows();

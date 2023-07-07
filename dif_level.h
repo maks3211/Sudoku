@@ -6,6 +6,7 @@
 #include <QGraphicsOpacityEffect>
 #include<QPropertyAnimation>
 #include<QLabel>
+#include<memory>
 class Dif_level : public QWidget
 {
     Q_OBJECT
@@ -13,10 +14,10 @@ public:
     explicit Dif_level(QWidget *parent = nullptr);
 
 private:
-    QLabel *napis;
-    my_button *lvl1;
-    my_button *lvl2;
-    my_button *lvl3;
+    std::shared_ptr<QLabel>napis;
+    std::shared_ptr<my_button> lvl1;
+    std::shared_ptr<my_button>lvl2;
+    std::shared_ptr<my_button>lvl3;
     int tmp;
 public:
     void show_window();

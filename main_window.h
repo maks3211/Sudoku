@@ -13,6 +13,7 @@
 #include<QStackedWidget>
 #include<QPropertyAnimation>
 #include<QGraphicsAnchorLayout>
+#include<memory>
 class Main_Window : public QWidget
 {
     Q_OBJECT
@@ -41,20 +42,20 @@ private:
     int stan = 0 ;
     std::string user;
     QStackedWidget *strony = new QStackedWidget;
-    QLabel *plansza;
+    std::shared_ptr<QLabel>plansza;
     QWidget *widget1;
     QPropertyAnimation *nowa;
-    my_button *nowa_gra_button;
-    my_button *wznow_button;
-    my_button *stat_button;
-    my_button *instrukcja_button;
-    my_button *wstecz_instrukcja;
-    my_button *wyjdz_button;
-    my_button *wstecz;
-    my_button *wyloguj;
-    my_button *zapisz_button;
-    QLabel *zapis_label;
-    QLabel *uzytkownik;
+     std::shared_ptr<my_button>nowa_gra_button;
+     std::shared_ptr<my_button>wznow_button;
+     std::shared_ptr<my_button>stat_button;
+     std::shared_ptr<my_button>instrukcja_button;
+     std::shared_ptr<my_button>wstecz_instrukcja;
+     std::shared_ptr<my_button>wyjdz_button;
+     std::shared_ptr<my_button>wstecz;
+     std::shared_ptr<my_button>wyloguj;
+     std::shared_ptr<my_button>zapisz_button;
+    std::shared_ptr<QLabel>zapis_label;
+    std::shared_ptr<QLabel>uzytkownik;
     Licznik *licznik;
     Gra *gra;
     Statistics_Window *statystyki_okno;

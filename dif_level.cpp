@@ -5,10 +5,10 @@ Dif_level::Dif_level(QWidget *parent)
     : QWidget{parent}
 {
 
-    lvl1= new  my_button("Łatwy",this);
-    lvl2= new  my_button("Średni",this);
-    lvl3= new  my_button("Trudny",this);
-    napis= new QLabel(this);
+    lvl1= std::make_shared<my_button>("Łatwy",this);
+    lvl2= std::make_shared<my_button>("Średni",this);
+    lvl3= std::make_shared<my_button>("Trudny",this);
+    napis= std::make_shared<QLabel>(this);
 
 
 lvl1->setFixedSize(75,40);
@@ -38,7 +38,7 @@ this->hide();
 
 
 
-connect(lvl1, &QPushButton::clicked, this, [=]() {
+connect(lvl1.get(), &QPushButton::clicked, this, [=]() {
     emit buttonClicked(1);
     emit chosen();
     this->close();
@@ -46,13 +46,13 @@ connect(lvl1, &QPushButton::clicked, this, [=]() {
 
 
 
-connect(lvl2, &QPushButton::clicked, this, [=]() {
+connect(lvl2.get(), &QPushButton::clicked, this, [=]() {
     emit buttonClicked(2);
     emit chosen();
     this->close();
 });
 
-connect(lvl3, &QPushButton::clicked, this, [=]() {
+connect(lvl3.get(), &QPushButton::clicked, this, [=]() {
     emit buttonClicked(3);
     emit chosen();
     this->close();
@@ -61,7 +61,7 @@ connect(lvl3, &QPushButton::clicked, this, [=]() {
 }
 
 
-
+//Wyświetlanie wyboru pozimów
 void Dif_level::show_window()
 {
 if (this->isHidden())
@@ -73,7 +73,6 @@ if (this->isHidden())
     animation->setStartValue(0); // wartość początkowa przezroczystości
     animation->setEndValue(1); // wartość końcowa przezroczystości
     animation->start();
-    qDebug() << "sdf";
 }
 else // Ponownie wciśniecie powoduje ukrycie
 {
@@ -87,7 +86,7 @@ int Dif_level::get_lvl()
     return tmp;
 }
 
-
+//Zamiana rozmaru przycisków
 void Dif_level::change_size()
 {
     if (lvl1->width()!=110)

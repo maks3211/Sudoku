@@ -15,6 +15,7 @@
 #include<QPropertyAnimation>
 #include<QTimer>
 #include<QApplication>
+#include<memory>
 class Login_Window : public QWidget
 {
     Q_OBJECT
@@ -23,16 +24,16 @@ public:
 std::string get_user();
 private:
 QStackedWidget *strony = new QStackedWidget;
-QLabel *text;
-QLabel *warrning;
-my_button *quit_button;
-my_button *login_button;
-my_button *guest_button;
-my_button *new_account;
-my_button *edit;
-QPushButton *back;
-QLineEdit *login;
-QLineEdit *password;
+std::shared_ptr<QLabel>text;
+std::shared_ptr<QLabel>warrning;
+std::shared_ptr<my_button>quit_button;
+std::shared_ptr<my_button>login_button;
+std::shared_ptr<my_button>guest_button;
+std::shared_ptr<my_button>new_account;
+std::shared_ptr<my_button>edit;
+std::shared_ptr<QPushButton>back;
+std::shared_ptr<QLineEdit> login;
+std::shared_ptr<QLineEdit>password;
 QVBoxLayout *layout1;
 QWidget *page1= new QWidget(); // menu glowne
 QWidget *page2= new QWidget(); // rejestracja
